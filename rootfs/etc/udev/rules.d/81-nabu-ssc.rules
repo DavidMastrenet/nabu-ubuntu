@@ -1,0 +1,1 @@
+ACTION!="remove", SUBSYSTEM=="misc", KERNEL=="fastrpc-sdsp", ENV{IIO_SENSOR_PROXY_TYPE}="ssc-accel ssc-light ssc-compass", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, -1, 0; 0, 0, 1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="iio-sensor-proxy.service"

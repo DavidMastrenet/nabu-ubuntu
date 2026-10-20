@@ -1,0 +1,9 @@
+[Unit]
+Description=Mark the current Linux boot slot successful
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/qbootctl -m
+RemainAfterExit=yes
+[Install]
+WantedBy=graphical.target

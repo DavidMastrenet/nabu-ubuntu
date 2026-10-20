@@ -1,0 +1,1 @@
+SUBSYSTEM=="rtc", KERNEL=="rtc[0-9]*", ATTR{name}=="rtc-pm8xxx*", SYMLINK+="rtc", OPTIONS+="link_priority=100"

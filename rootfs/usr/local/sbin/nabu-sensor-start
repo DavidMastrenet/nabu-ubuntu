@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+for r in /sys/class/remoteproc/remoteproc*; do
+    if [ "$(cat "$r/name")" = slpi ]; then
+        n=${r##*/}
+        echo disabled > /sys/kernel/debug/remoteproc/$n/recovery
+    fi
+done
+exec /usr/local/libexec/nabu/hexagonrpcd -f /dev/fastrpc-sdsp -d sdsp -s -R /usr/local/share/qcom/sm8150/xiaomi/nabu

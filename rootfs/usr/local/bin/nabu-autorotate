@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+from gi.repository import Gio, GLib
+import sys
+
+def proxy(bus, name, path, iface):
+    return Gio.DBusProxy.new_for_bus_sync(bus, Gio.DBusProxyFlags.NONE, None, name, path, iface, None)
+sensor = proxy(Gio.BusType.SYSTEM, 'net.hadess.SensorProxy', '/net/hadess/SensorProxy', 'net.hadess.SensorProxy')
+display = proxy(Gio.BusType.SESSION, 'org.gnome.Mutter.DisplayConfig', '/org/gnome/Mutter/DisplayConfig', 'org.gnome.Mutter.DisplayConfig')
+settings = Gio.Settings.new('org.gnome.settings-daemon.peripherals.touchscreen')
+transforms = {'normal': 0, 'left-up': 1, 'bottom-up': 2, 'right-up': 3}
+claimed = False
+
+def owner_changed(*args):
+    global claimed
+    claimed = False
+sensor.connect('notify::g-name-owner', owner_changed)
+
+def tick():
+    global claimed
+    try:
+        if not sensor.get_name_owner():
+            claimed = False
+            return True
+        if not claimed:
+            sensor.call_sync('ClaimAccelerometer', None, Gio.DBusCallFlags.NONE, 3000, None)
+            claimed = True
+        if settings.get_boolean('orientation-lock'):
+            return True
+        value = sensor.get_cached_property('AccelerometerOrientation')
+        orientation = value.unpack() if value else 'undefined'
+        if orientation not in transforms:
+            return True
+        serial, monitors, logical, props = display.call_sync('GetCurrentState', None, Gio.DBusCallFlags.NONE, 3000, None).unpack()
+        # Only the built-in screen is supported; leave external display layouts alone.
+        if len(logical) != 1 or len(logical[0][5]) != 1:
+            return True
+        x, y, scale, rotation, primary, specs, _ = logical[0]
+        if specs[0][0] != 'DSI-1' or rotation == transforms[orientation]:
+            return True
+        mode = next(m[0] for monitor in monitors if monitor[0][0] == 'DSI-1' for m in monitor[1] if m[6].get('is-current'))
+        configuration = [(x, y, scale, transforms[orientation], primary, [('DSI-1', mode, {})])]
+        options = {'layout-mode': GLib.Variant('u', props['layout-mode'])}
+        display.call_sync('ApplyMonitorsConfig', GLib.Variant('(uua(iiduba(ssa{sv}))a{sv})', (serial, 1, configuration, options)), Gio.DBusCallFlags.NONE, 3000, None)
+        print('orientation:', orientation, flush=True)
+    except GLib.Error as error:
+        print(error.message, file=sys.stderr, flush=True)
+    return True
+GLib.timeout_add_seconds(1, tick)
+GLib.MainLoop().run()

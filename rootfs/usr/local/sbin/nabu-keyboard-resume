@@ -1,0 +1,43 @@
+#!/usr/bin/python3
+"""GPL-2.0-or-later: recover the nabu magnetic keyboard after system sleep.
+
+USB reset alone does not recover key reports. Pulse its dedicated reset
+GPIO49, keeping GPIO82 (power) unchanged. Never access another board.
+"""
+from pathlib import Path
+import time
+import gpiod
+from gpiod.line import Direction, Value
+
+model = Path('/proc/device-tree/model').read_text().rstrip('\0')
+if model != 'Xiaomi Pad 5':
+    raise SystemExit('Unsupported board: ' + model)
+
+present = False
+for dev in Path('/sys/bus/usb/devices').iterdir():
+    try:
+        present |= ((dev / 'idVendor').read_text().strip() == '3206' and
+                    (dev / 'idProduct').read_text().strip() == '3ffc')
+    except FileNotFoundError:
+        pass
+if not present:
+    raise SystemExit(0)
+
+for path in Path('/dev').glob('gpiochip*'):
+    with gpiod.Chip(str(path)) as chip:
+        if chip.get_info().label != '3100000.pinctrl':
+            continue
+        with chip.request_lines(consumer='nabu-keyboard-resume', config={
+            49: gpiod.LineSettings(direction=Direction.OUTPUT,
+                                   output_value=Value.ACTIVE)
+        }) as request:
+            try:
+                request.set_value(49, Value.INACTIVE)
+                time.sleep(0.1)
+            finally:
+                request.set_value(49, Value.ACTIVE)
+                time.sleep(0.2)
+        print('nabu: keyboard hardware reset after resume')
+        break
+else:
+    raise SystemExit('nabu TLMM GPIO controller not found')

@@ -1,0 +1,14 @@
+[Unit]
+Description=Xiaomi Pad sensor DSP file service
+After=systemd-udev-settle.service local-fs.target pd-mapper.service rmtfs.service
+Wants=systemd-udev-settle.service
+Before=iio-sensor-proxy.service
+ConditionPathExists=/dev/fastrpc-sdsp
+[Service]
+Type=exec
+ExecStartPre=/usr/bin/sleep 5
+ExecStart=/usr/local/sbin/nabu-sensor-start
+TimeoutStopSec=5
+Restart=no
+[Install]
+WantedBy=multi-user.target

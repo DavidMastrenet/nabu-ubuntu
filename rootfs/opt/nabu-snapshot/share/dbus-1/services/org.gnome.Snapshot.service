@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.gnome.Snapshot
+Exec=/opt/nabu-snapshot/bin/snapshot --gapplication-service

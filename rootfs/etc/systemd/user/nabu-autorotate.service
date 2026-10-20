@@ -1,0 +1,10 @@
+[Unit]
+Description=Xiaomi Pad automatic screen orientation
+After=graphical-session.target
+PartOf=graphical-session.target
+[Service]
+ExecStart=/usr/local/bin/nabu-autorotate
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=graphical-session.target

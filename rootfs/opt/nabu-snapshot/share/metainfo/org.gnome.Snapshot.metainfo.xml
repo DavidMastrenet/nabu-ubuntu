@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Maximiliano Sandoval 2023 <msandova@gnome.org> -->
+<component type="desktop-application">
+  <id>org.gnome.Snapshot</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Camera</name>
+  <name xml:lang="zh-Hant-TW">相機</name>
+  <name xml:lang="zh-Hans-CN">相机</name>
+  <name xml:lang="vi">Máy ảnh</name>
+  <name xml:lang="uz-Latn">Kamera</name>
+  <name xml:lang="uk">Камера</name>
+  <name xml:lang="ug">كامېرا</name>
+  <name xml:lang="tr">Kamera</name>
+  <name xml:lang="th">กล้อง</name>
+  <name xml:lang="sv">Kamera</name>
+  <name xml:lang="sr-Latn">Kamera</name>
+  <name xml:lang="sr-Cyrl">Камера</name>
+  <name xml:lang="sl">Kamera</name>
+  <name xml:lang="sk">Kamera</name>
+  <name xml:lang="rw">Kamera</name>
+  <name xml:lang="ru">Камера</name>
+  <name xml:lang="ro">Camera</name>
+  <name xml:lang="pt-BR">Câmera</name>
+  <name xml:lang="pt">Câmara</name>
+  <name xml:lang="pl">Aparat</name>
+  <name xml:lang="pa">ਕੈਮਰਾ</name>
+  <name xml:lang="oc">Camèra</name>
+  <name xml:lang="nl">Camera</name>
+  <name xml:lang="ne">क्यामेरा</name>
+  <name xml:lang="nb">Kamera</name>
+  <name xml:lang="lv">Kamera</name>
+  <name xml:lang="lt">Kamera</name>
+  <name xml:lang="kw">Kamera</name>
+  <name xml:lang="ko">카메라</name>
+  <name xml:lang="kk-Cyrl">Камера</name>
+  <name xml:lang="ka">კამერა</name>
+  <name xml:lang="ja">カメラ</name>
+  <name xml:lang="it">Fotocamera</name>
+  <name xml:lang="id">Kamera</name>
+  <name xml:lang="ia">Camera</name>
+  <name xml:lang="hu">Kamera</name>
+  <name xml:lang="hi">कैमरा</name>
+  <name xml:lang="he">מצלמה</name>
+  <name xml:lang="gl">Cámara</name>
+  <name xml:lang="fur">Fotocjamare</name>
+  <name xml:lang="fr">Caméra</name>
+  <name xml:lang="fil">Kamera</name>
+  <name xml:lang="fi">Kamera</name>
+  <name xml:lang="fa">دوربین</name>
+  <name xml:lang="eu">Kamera</name>
+  <name xml:lang="es">Cámara</name>
+  <name xml:lang="eo">Kamerao</name>
+  <name xml:lang="en-GB">Camera</name>
+  <name xml:lang="el">Κάμερα</name>
+  <name xml:lang="de">Kamera</name>
+  <name xml:lang="da">Kamera</name>
+  <name xml:lang="cs">Fotoaparát</name>
+  <name xml:lang="ca">Càmera</name>
+  <name xml:lang="bg">Камера</name>
+  <name xml:lang="be-Cyrl">Камера</name>
+  <name xml:lang="ar">المصوِّرة</name>
+  <summary>Take pictures and videos</summary>
+  <summary xml:lang="zh-Hant-TW">拍攝照片與錄製影片</summary>
+  <summary xml:lang="zh-Hans-CN">拍摄照片和视频</summary>
+  <summary xml:lang="vi">Chụp ảnh và quay phim</summary>
+  <summary xml:lang="uz-Latn">Rasmlar va videolarni oling</summary>
+  <summary xml:lang="uk">Створення зображень та відео</summary>
+  <summary xml:lang="ug">سۈرەتكە تارتىپ ۋە سىنغا ئالىدۇ</summary>
+  <summary xml:lang="tr">Resim ve video çek</summary>
+  <summary xml:lang="th">ถ่ายภาพและวิดีโอ</summary>
+  <summary xml:lang="sv">Ta bilder och spela in videoklipp</summary>
+  <summary xml:lang="sr-Latn">Snimanje videa i slika</summary>
+  <summary xml:lang="sr-Cyrl">Снимање видеа и слика</summary>
+  <summary xml:lang="sl">Fotografiranje in snemanje videoposnetkov</summary>
+  <summary xml:lang="sk">Zachytáva obrázky a videá</summary>
+  <summary xml:lang="rw">Fata amafoto n'amavidewo</summary>
+  <summary xml:lang="ru">Снимайте фото и видео</summary>
+  <summary xml:lang="ro">Fotografiază și filmează</summary>
+  <summary xml:lang="pt-BR">Tire fotos e vídeos</summary>
+  <summary xml:lang="pt">Tirar fotografias e gravar vídeos</summary>
+  <summary xml:lang="pl">Robienie zdjęć i nagrywanie filmów</summary>
+  <summary xml:lang="pa">ਤਸਵੀਰਾਂ ਅਤੇ ਵੀਡੀਓ ਬਣਾਓ</summary>
+  <summary xml:lang="oc">Prendre de fòtos e vidèos</summary>
+  <summary xml:lang="nl">Maak foto’s en video’s</summary>
+  <summary xml:lang="ne">फोटो वा भिडियो खिच्ने</summary>
+  <summary xml:lang="nb">Ta bilder og videoer</summary>
+  <summary xml:lang="lv">Uzņemiet bildes un video</summary>
+  <summary xml:lang="lt">Fotografuokite ir filmuokite</summary>
+  <summary xml:lang="kw">Kemeres skeusennow ha gwydhyowyow</summary>
+  <summary xml:lang="ko">사진 및 영상을 촬영합니다</summary>
+  <summary xml:lang="kk-Cyrl">Фотолар мен видеоларды түсіру</summary>
+  <summary xml:lang="ka">გადაიღეთ სურათები და ვიდეოები</summary>
+  <summary xml:lang="ja">写真と動画を撮影</summary>
+  <summary xml:lang="it">Scatta foto e registra video</summary>
+  <summary xml:lang="id">Ambil gambar dan video</summary>
+  <summary xml:lang="ia">Prende imagines e videos</summary>
+  <summary xml:lang="hu">Képek és videók rögzítése</summary>
+  <summary xml:lang="hi">तस्वीरें और वीडियो लें</summary>
+  <summary xml:lang="he">צילום תמונות וסרטים</summary>
+  <summary xml:lang="gl">Tome capturas e vídeos</summary>
+  <summary xml:lang="fur">Cjape sù imagjin e videos</summary>
+  <summary xml:lang="fr">Prendre des photos ou enregistrer des vidéos</summary>
+  <summary xml:lang="fil">Kumuha ng mga larawan at video</summary>
+  <summary xml:lang="fi">Ota kuvia ja videoita kameralla</summary>
+  <summary xml:lang="fa">گرفتن نگاره و ویدیو</summary>
+  <summary xml:lang="eu">Sortu irudiak eta bideoak</summary>
+  <summary xml:lang="es">Hacer fotos y vídeos</summary>
+  <summary xml:lang="eo">Fari fotojn kaj videojn</summary>
+  <summary xml:lang="en-GB">Take pictures and videos</summary>
+  <summary xml:lang="el">Λήψη φωτογραφιών και βίντεο</summary>
+  <summary xml:lang="de">Bilder und Videos aufnehmen</summary>
+  <summary xml:lang="da">Tag billeder og optag videoer</summary>
+  <summary xml:lang="cs">Pořizujte obrázky a videa</summary>
+  <summary xml:lang="ca">Fes fotos i vídeos</summary>
+  <summary xml:lang="bg">Заснемане на снимки и видео клипове</summary>
+  <summary xml:lang="be-Cyrl">Атрыманне здымкаў і запіс відэа</summary>
+  <summary xml:lang="ar">خُذ صورًا وفيديوهات</summary>
+  <description>
+    <p>
+      Take pictures and videos on your computer, tablet, or phone.
+    </p>
+    <p xml:lang="zh-Hant-TW">用您的電腦、平板、手機等拍攝照片與錄製影片。</p>
+    <p xml:lang="zh-Hans-CN">在你的计算机、平板设备或手机上拍摄照片和视频。</p>
+    <p xml:lang="vi">Chụp ảnh và quay phim trên máy tính, máy tính bảng hoặc điện thoại của bạn.</p>
+    <p xml:lang="uz-Latn">Kompyuteringizda, planshetingizda yoki telefoningizda rasm va videolarni oling.</p>
+    <p xml:lang="uk">Створюйте знімки і відео на вашому комп'ютері, планшеті або телефоні.</p>
+    <p xml:lang="ug">كومپيۇتېر، تاختا كومپيۇتېر ۋە تېلېفوندا سۈرەتكە تارتىپ سىنغا ئالىدۇ.</p>
+    <p xml:lang="tr">Bilgisayarınızdan, tabletinizden ya da telefonunuzdan resim ve video çekin.</p>
+    <p xml:lang="th">ถ่ายภาพและวิดีโอในคอมพิวเตอร์ แท็บเล็ต หรือโทรศัพท์ของคุณ</p>
+    <p xml:lang="sv">Ta bilder och spela in videoklipp på din dator, platta eller telefon.</p>
+    <p xml:lang="sr-Latn">Hvatajte video ili slike na vašem računaru, tabletu ili telefonu.</p>
+    <p xml:lang="sr-Cyrl">Хватајте видео или слике на вашем рачунару, таблету или телефону.</p>
+    <p xml:lang="sl">Slikanje in snemanje videa na osebnem računalniku, tabličnem računalniku ali telefonu.</p>
+    <p xml:lang="sk">Zachytávajte obrázky a videá do vášho počítača, tabletu alebo telefónu.</p>
+    <p xml:lang="rw">Gufata amafoto n'amavidewo kuri murandasi, tablet, cyangwa telefone.</p>
+    <p xml:lang="ru">Снимайте фото и видео на компьютер, планшет или телефон.</p>
+    <p xml:lang="ro">Fotografiază și filmează cu calculatorul, tableta sau telefonul.</p>
+    <p xml:lang="pt-BR">Tire fotos e vídeos em seu computador, tablet ou telefone.</p>
+    <p xml:lang="pt">Tirar fotografias e gravar vídeos no seu computador, tablet ou telefone.</p>
+    <p xml:lang="pl">Robienie zdjęć i nagrywanie filmów na komputerze, tablecie i telefonie.</p>
+    <p xml:lang="pa">ਆਪਣੇ ਕੰਪਿਊਟਰ, ਟੈਬਲੇਟ ਜਾਂ ਫ਼ੋਨ ਉੱਤੇ ਤਸਵੀਰ ਖਿੱਚੋਂ ਅਤੇ ਵੀਡੀਓ ਲਵੋ।</p>
+    <p xml:lang="oc">Prenètz de fòtos e vidèos amb vòstre ordenador, tauleta o telefòn.</p>
+    <p xml:lang="nl">Maak foto’s en video’s op uw computer, tablet of telefoon.</p>
+    <p xml:lang="ne">तपाईंको कम्प्युटर, ट्याब्लेट वा फोनमा तस्वीरहरू र भिडियोहरू लिनुहोस्.</p>
+    <p xml:lang="nb">Ta bilder og videoer på datamaskinen, nettbrettet eller telefonen din.</p>
+    <p xml:lang="lv">Uzņemiet bildes vai video ar datoru, planšeti vai telefonu.</p>
+    <p xml:lang="lt">Fotografuokite ir filmuokite savo kompiuteriu, planšete ar telefonu.</p>
+    <p xml:lang="kw">Kemeres skeusennow ha gwydhyowyow war dha amontyell, leghen, po kellgowser.</p>
+    <p xml:lang="ko">사진과 영상을 컴퓨터, 태블릿, 모바일 전화기에 촬영합니다.</p>
+    <p xml:lang="kk-Cyrl">Фото мен видеоларды компьютер, планшет немесе телефоныңызда түсіру.</p>
+    <p xml:lang="ka">გადაიღეთ სურათები და ვიდეო თქვენი კომპიუტერით, ტაბლეტით და ტელეფონით.</p>
+    <p xml:lang="ja">コンピューター、タブレット、スマートフォンで写真や動画を撮影する。</p>
+    <p xml:lang="it">Scatta foto e registra video su computer, tablet e telefono.</p>
+    <p xml:lang="id">Ambil gambar dan video di komputer, tablet, atau ponsel Anda.</p>
+    <p xml:lang="ia">Prende photos e videos sur tu computator, tablet, o telephono.</p>
+    <p xml:lang="hu">Készítsen képeket és videókat a számítógépén, táblagépén vagy telefonján.</p>
+    <p xml:lang="hi">अपने कंप्यूटर, टैबलेट या फोन पर तस्वीर और वीडियो लें।</p>
+    <p xml:lang="he">צילום תמונות וסרטים על המחשב האישי, הטלפון או מחשב הלוח שלך.</p>
+    <p xml:lang="gl">Saque fotos e grave vídeos no seu computador, tableta ou teléfono.</p>
+    <p xml:lang="fur">Cjape sù imagjins e videos sul to computer, tablet o telefon.</p>
+    <p xml:lang="fr">Prendre des photos ou des vidéos sur votre ordinateur, votre tablette ou téléphone.</p>
+    <p xml:lang="fil">Kumuha ng mga litrato at video sa iyong kompyuter, tablet, o telepono.</p>
+    <p xml:lang="fi">Ota kuvia ja videoita tietokoneellasi, tablet-laitteella tai puhelimella.</p>
+    <p xml:lang="fa">گرفتن نگاره یا ویدیو روی رایانه، رایانک یا تلفنتان.</p>
+    <p xml:lang="eu">Sortu irudiak eta bideoak zure ordenagailuan, tabletan edo telefonoan.</p>
+    <p xml:lang="es">Hacer fotos y vídeos con su ordenador, tableta o teléfono.</p>
+    <p xml:lang="eo">Fari fotojn kaj videojn sur via komputilo, tabulkomputilo aŭ telefono.</p>
+    <p xml:lang="en-GB">Take pictures and videos on your computer, tablet, or phone.</p>
+    <p xml:lang="el">Λήψη φωτογραφιών και βίντεο στον υπολογιστή σας, το tablet ή το τηλέφωνο.</p>
+    <p xml:lang="de">Nehmen Sie Bilder mit Ihrem Computer, Tablett oder Smartphone auf.</p>
+    <p xml:lang="da">Tag billeder og optag videoer på din computer, tablet eller telefon.</p>
+    <p xml:lang="cs">Pořizujte obrázky a videa na svém počítači, tabletu nebo telefonu.</p>
+    <p xml:lang="ca">Feu fotos i vídeos a l'ordinador, a la tauleta o al telèfon.</p>
+    <p xml:lang="bg">Заснимане на снимки и видео клипове с компютър, таблет или телефон.</p>
+    <p xml:lang="be-Cyrl">Фотаздымка і запіс відэа на камп'ютары, планшэце або тэлефоне.</p>
+    <p xml:lang="ar">التقط صورًا وسجِّل فيديوهات على حاسوبك أو لوحيِّك أو هاتفك.</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://static.gnome.org/appdata/gnome-45/snapshot/screenshot1.png</image>
+      <caption>Camera's main interface</caption>
+      <caption xml:lang="zh-Hant-TW">相機的主介面</caption>
+      <caption xml:lang="zh-Hans-CN">相机的主界面</caption>
+      <caption xml:lang="vi">Giao diện chính của Máy ảnh</caption>
+      <caption xml:lang="uz-Latn">Kameraning asosiy interfeysi</caption>
+      <caption xml:lang="uk">Головний інтерфейс «Камери»</caption>
+      <caption xml:lang="ug">كامېرانىڭ ئاساسىي ئارايۈزى</caption>
+      <caption xml:lang="tr">Kamera ana arayüzü</caption>
+      <caption xml:lang="th">อินเทอร์เฟซหลักของ “กล้อง”</caption>
+      <caption xml:lang="sv">Kameras huvudgränssnitt</caption>
+      <caption xml:lang="sr-Latn">Glavni interfejs kamere</caption>
+      <caption xml:lang="sr-Cyrl">Главни интерфејс камере</caption>
+      <caption xml:lang="sl">Glavni vmesnik Kamere</caption>
+      <caption xml:lang="sk">Hlavné rozhranie aplikácie Fotoaparát</caption>
+      <caption xml:lang="rw">Imigaragarire nyamukuru ya Kamera</caption>
+      <caption xml:lang="ru">Главный интерфейс Камеры</caption>
+      <caption xml:lang="ro">Interfața principală Camera</caption>
+      <caption xml:lang="pt-BR">Interface principal do Câmera</caption>
+      <caption xml:lang="pt">Interface principal da câmara</caption>
+      <caption xml:lang="pl">Główny interfejs programu</caption>
+      <caption xml:lang="pa">ਕੈਮਰੇ ਦਾ ਮੁੱਖ ਇੰਟਰਫ਼ੇਸ</caption>
+      <caption xml:lang="oc">Interfàcia principala de Camèra</caption>
+      <caption xml:lang="nl">Hoofdinterface van de camera</caption>
+      <caption xml:lang="ne">क्यामेराको मुख्य इन्टरफेस</caption>
+      <caption xml:lang="nb">Kamera sin hovedskjerm</caption>
+      <caption xml:lang="lv">Kameras galvenā saskarne</caption>
+      <caption xml:lang="lt">Kameros pagrindinė sąsaja</caption>
+      <caption xml:lang="kw">An ynterfas chif Kamera</caption>
+      <caption xml:lang="ko">카메라 주 인터페이스</caption>
+      <caption xml:lang="kk-Cyrl">Камераның негізгі интерфейсі</caption>
+      <caption xml:lang="ka">კამერის მთავარი ინტერფეისი</caption>
+      <caption xml:lang="ja">カメラのメイン画面</caption>
+      <caption xml:lang="it">Interfaccia principale di Fotocamera</caption>
+      <caption xml:lang="id">Camera's main interface</caption>
+      <caption xml:lang="ia">Interfacie principal de Camera     </caption>
+      <caption xml:lang="hu">A Kamera fő felülete</caption>
+      <caption xml:lang="hi">कैमरे का मुख्य इंटरफ़ेस</caption>
+      <caption xml:lang="he">הממשק הראשי של המצלמה</caption>
+      <caption xml:lang="gl">Interface principal de Cámara</caption>
+      <caption xml:lang="fur">Interface principâl di Fotocjamare</caption>
+      <caption xml:lang="fr">Interface principale de Caméra</caption>
+      <caption xml:lang="fil">Pangunahing interface ng Kamera</caption>
+      <caption xml:lang="fi">Kameran käyttöliittymä</caption>
+      <caption xml:lang="fa">واسط اصلی دوربین</caption>
+      <caption xml:lang="eu">Kameraren interfaze nagusia</caption>
+      <caption xml:lang="es">Interfaz principal de Cámara</caption>
+      <caption xml:lang="eo">Ĉefa interfaco de la kamerao</caption>
+      <caption xml:lang="en-GB">Camera's main interface</caption>
+      <caption xml:lang="el">Η κύρια διεπαφή της κάμερας</caption>
+      <caption xml:lang="de">Haupt-Bedienoberfläche von Kamera</caption>
+      <caption xml:lang="da">Kameraets hovedgrænseflade</caption>
+      <caption xml:lang="cs">Hlavní rozhraní Fotoaparátu</caption>
+      <caption xml:lang="ca">Interfície principal de la càmera</caption>
+      <caption xml:lang="bg">Основен интерфейс на камерата</caption>
+      <caption xml:lang="be-Cyrl">Асноўны інтэрфейс Camera</caption>
+      <caption xml:lang="ar">واجهة المصوِّرة الرئيسية</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://static.gnome.org/appdata/gnome-45/snapshot/gallery.png</image>
+      <caption>Camera's gallery viewer</caption>
+      <caption xml:lang="zh-Hant-TW">相機的相片庫</caption>
+      <caption xml:lang="zh-Hans-CN">相机的相册查看器</caption>
+      <caption xml:lang="vi">Trình xem bộ sưu tập Máy ảnh</caption>
+      <caption xml:lang="uz-Latn">Kamera galereyasi tomoshabin</caption>
+      <caption xml:lang="uk">Перегляд галереї «Камери»</caption>
+      <caption xml:lang="ug">كامېرا سۈرەتدان كۆرگۈچ</caption>
+      <caption xml:lang="tr">Kamera galeri gösterici</caption>
+      <caption xml:lang="th">เครื่องมือดูคลังภาพของ “กล้อง”</caption>
+      <caption xml:lang="sv">Kameras gallerivisare</caption>
+      <caption xml:lang="sr-Latn">Glevni pregledač kamere</caption>
+      <caption xml:lang="sr-Cyrl">Глевни прегледач камере</caption>
+      <caption xml:lang="sl">Preglednik galerije Kamere</caption>
+      <caption xml:lang="sk">Prehliadač galérie aplikácie Fotoaparát</caption>
+      <caption xml:lang="rw">Mwerekanamashusho ya Kamera</caption>
+      <caption xml:lang="ru">Просмотр галереи Камеры</caption>
+      <caption xml:lang="ro">Galerie de poze integrată</caption>
+      <caption xml:lang="pt-BR">Visualizador de galeria do Câmera</caption>
+      <caption xml:lang="pt">Visualizador de galerias da câmara</caption>
+      <caption xml:lang="pl">Przeglądarka galerii</caption>
+      <caption xml:lang="pa">ਕੈਮਰੇ ਦੀ ਗੈਲਰੀ ਦਰਸ਼ਕ</caption>
+      <caption xml:lang="oc">Visualizaire de la galariá de Camèra</caption>
+      <caption xml:lang="nl">Galerijweergave van Camera</caption>
+      <caption xml:lang="ne">क्यामेराको छवि सङ्कलन प्रदर्शक</caption>
+      <caption xml:lang="nb">Kamera sitt galleri</caption>
+      <caption xml:lang="lv">Kameras galerijas skatītājs</caption>
+      <caption xml:lang="lt">Kameros galerijos peržiūra</caption>
+      <caption xml:lang="kw">An gweler mirva Kamera</caption>
+      <caption xml:lang="ko">카메라 갤러리 보기</caption>
+      <caption xml:lang="kk-Cyrl">Камераның галерея көрсетушісі</caption>
+      <caption xml:lang="ka">კამერის სურათების გალერეა</caption>
+      <caption xml:lang="ja">カメラのギャラリー画面</caption>
+      <caption xml:lang="it">Galleria di Fotocamera</caption>
+      <caption xml:lang="id">Penampil galeri kamera</caption>
+      <caption xml:lang="ia">Visualisator de galeria de Camera</caption>
+      <caption xml:lang="hu">A Kamera galériamegjelenítője</caption>
+      <caption xml:lang="hi">कैमरे की गैलरी दर्शक</caption>
+      <caption xml:lang="he">תצוגה הגלריה של המצלמה</caption>
+      <caption xml:lang="gl">Visor de galería de Cámara</caption>
+      <caption xml:lang="fur">Visualizadôr galaire de fotocjamare</caption>
+      <caption xml:lang="fr">Visionneur de la galerie de Caméra</caption>
+      <caption xml:lang="fil">Pantingin ng gallery ng Kamera</caption>
+      <caption xml:lang="fi">Kameran galleriakatselin</caption>
+      <caption xml:lang="fa">جُنگ‌بینِ دوربین</caption>
+      <caption xml:lang="eu">Kameraren galeria-ikustailea</caption>
+      <caption xml:lang="es">Visor de la galeria de Cámara</caption>
+      <caption xml:lang="eo">Galeria vidilo de la kamerao</caption>
+      <caption xml:lang="en-GB">Camera's gallery viewer</caption>
+      <caption xml:lang="el">Προβολή συλλογής κάμερας</caption>
+      <caption xml:lang="de">Galeriebetrachter von Kamera</caption>
+      <caption xml:lang="da">Kameraets gallerivisning</caption>
+      <caption xml:lang="cs">Prohlížeč galerie Fotoaparátu</caption>
+      <caption xml:lang="ca">Visualitzador de la galeria de la càmera</caption>
+      <caption xml:lang="bg">Галерия на камерата</caption>
+      <caption xml:lang="be-Cyrl">Прагляд галерэі Camera</caption>
+      <caption xml:lang="ar">مُظهر معرض المصوِّرة</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://apps.gnome.org/Snapshot/</url>
+  <url type="contribute">https://welcome.gnome.org/app/Snapshot/</url>
+  <url type="bugtracker">https://gitlab.gnome.org/GNOME/snapshot/issues</url>
+  <url type="translate">https://l10n.gnome.org/module/snapshot/</url>
+  <url type="donation">https://www.gnome.org/donate</url>
+  <url type="vcs-browser">https://gitlab.gnome.org/GNOME/snapshot</url>
+  <url type="contact">https://matrix.to/#/#snapshot:gnome.org</url>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="50.0" date="2026-03-11">
+      <description>
+        <p>Snapshot 50.0 release</p>
+        <ul>
+          <li>Prefer caps with more desirable formats</li>
+          <li>Fix bitrate for openh264enc</li>
+          <li>Set video/image caps to I420 and VN12</li>
+          <li>Improve configurations for certain encoders</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="49.0" date="2025-09-11">
+      <description>
+        <p>Snapshot 49.0 release</p>
+        <ul>
+          <li>Make app DBus-activatable</li>
+          <li>Improve how GstCaps were created</li>
+          <li>Support for hardware video encoding</li>
+          <li>Prefer H264/MP4 format if possible fore recording</li>
+          <li>Use native GTK's YUV support if available</li>
+          <li>Mirrored QR codes can now be scanned</li>
+          <li>Remove video-format gsetting</li>
+          <li>Port shortcuts dialog to AdwShortcutsDialog</li>
+          <li>Remove meson option to run without portals</li>
+          <li>Show release notes on about dialog</li>
+          <li>Add warning when there are missing GStreamer plugins</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="48.0.1" date="2025-03-15">
+      <description>
+        <p>Snapshot 48.0 release</p>
+        <ul>
+          <li>Add QR code detection</li>
+          <li>Register app id when app is not sandboxed</li>
+          <li>Properly detects missing camera permissions</li>
+          <li>Include left-side window controls</li>
+          <li>Improve offloading performance</li>
+          <li>Port to new libadwaita widgets</li>
+          <li>Add debug output via flag</li>
+          <li>Fix opening multiple preference windows</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="47.1" date="2024-10-12">
+      <description>
+        <p>Snapshot 47.1 release</p>
+        <ul>
+          <li>Optimize caps selection for 16:9</li>
+          <li>Only get devices from pipewire</li>
+        </ul>
+      </description>
+    </release>
+    <release version="47.0.1" date="2024-09-15">
+      <description>
+        <p>Snapshot 47.0.1 release</p>
+        <ul>
+          <li>Fix a build issue where the tarballs would be generated with missing vendor packages</li>
+        </ul>
+      </description>
+    </release>
+    <release version="47.0" date="2024-09-15">
+      <description>
+        <p>Snapshot 47.0 release</p>
+        <ul>
+          <li>Improve recording pipeline</li>
+          <li>Improve video player performance</li>
+          <li>Offload DMABUFs in Viewfinder</li>
+          <li>Squash various bugs</li>
+          <li>Update dependencies</li>
+          <li>Update translations</li>
+          <li>Use glycin for viewing images</li>
+        </ul>
+      </description>
+    </release>
+    <release version="46.3" date="2024-05-06">
+      <description>
+        <p>Snapshot 46.3 bugfix release</p>
+        <ul>
+          <li>Assume cameras are front cameras by default</li>
+          <li>Update caps when switching cameras</li>
+          <li>Do not store caps file on errors</li>
+          <li>Avoid unnecessary stream restarts</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="46.2" date="2024-04-10">
+      <description>
+        <p>Snapshot 46.2 bugfix release</p>
+        <ul>
+          <li>Disable portal</li>
+          <li>Always use preferred caps</li>
+        </ul>
+      </description>
+    </release>
+    <release version="46.1" date="2024-03-31">
+      <description>
+        <p>Snapshot 46.1 bugfix release</p>
+        <ul>
+          <li>Require only rustc 1.70</li>
+          <li>Fix framerate comparison</li>
+          <li>Filter out more IR cameras</li>
+          <li>Update translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="46.0" date="2024-03-15">
+      <description>
+        <p>Snapshot 46.0 release</p>
+        <ul>
+          <li>Update to zbus 4.0</li>
+          <li>Improve default camera resolution selection</li>
+          <li>Update Dependencies</li>
+          <li>Update translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="46~rc" date="2024-03-02" type="development">
+      <description>
+        <p>Release Candidate Release</p>
+        <ul>
+          <li>Update to zbus 4.0</li>
+          <li>Improve default camera resolution selection</li>
+        </ul>
+      </description>
+    </release>
+    <release version="46~beta" date="2024-02-17" type="development">
+      <description>
+        <p>Beta Release</p>
+        <ul>
+          <li>Better camera resolution and formatting</li>
+          <li>Update Dependencies</li>
+          <li>Update translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="45.2" date="2023-12-27">
+      <description>
+        <p>Minor bugfix release.</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="45.1" date="2023-12-09">
+      <description>
+        <p>Minor release.</p>
+        <ul>
+          <li>Updated translations</li>
+          <li>Various Bugfixes</li>
+          <li>Update internal libraries</li>
+        </ul>
+      </description>
+    </release>
+    <release version="45.0" date="2023-09-16">
+      <description>
+        <p>First stable release of Camera.</p>
+        <ul>
+          <li>Updated translations</li>
+          <li>Various Bugfixes</li>
+          <li>Use pipewire node description to name cameras</li>
+        </ul>
+      </description>
+    </release>
+    <release version="45~beta" date="2023-08-05" type="development">
+      <description>
+        <p>Minor release.</p>
+        <ul>
+          <li>Improve Video Player controller</li>
+          <li>Improved accessibility</li>
+          <li>Update styles throughout the app</li>
+          <li>Squash various bugs</li>
+          <li>Update translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="45~alpha" date="2023-06-30" type="development">
+      <description>
+        <p>Minor release with updates to various dependencies.</p>
+        <ul>
+          <li>Update Aperture to v0.2, update Rust to 1.70</li>
+          <li>Update to Libadwaita 1.4, use new adaptive components</li>
+          <li>Show all window controls on the top of the window</li>
+          <li>Improved accessibility</li>
+          <li>Squash various bugs</li>
+          <li>Update translations</li>
+        </ul>
+      </description>
+    </release>
+    <release version="44.2" date="2023-05-22">
+      <description>
+        <p>Minor bugfix release.</p>
+        <ul>
+          <li>Improve adaptive controls</li>
+          <li>New translations</li>
+          <li>Disable composition guidelines by default</li>
+        </ul>
+      </description>
+    </release>
+    <release version="44.1" date="2023-05-08">
+      <description>
+        <p>Minor release.</p>
+        <ul>
+          <li>Adaptive controls</li>
+          <li>Fixed multiple cameras, including the PinePhone Pro's</li>
+          <li>Improve error handling and reporting</li>
+          <li>Add composition guidelines</li>
+        </ul>
+      </description>
+    </release>
+    <release version="44.0" date="2023-04-26">
+      <description>
+        <p>Preview release of Snapshot.</p>
+      </description>
+    </release>
+  </releases>
+  <!-- developer_name tag deprecated with Appstream 1.0 -->
+  <developer_name>The GNOME Project</developer_name>
+  <developer_name xml:lang="zh-Hant-TW">GNOME 專案</developer_name>
+  <developer_name xml:lang="zh-Hans-CN">GNOME 项目</developer_name>
+  <developer_name xml:lang="vi">Dự án GNOME</developer_name>
+  <developer_name xml:lang="uz-Latn">GNOME loyihasi</developer_name>
+  <developer_name xml:lang="uk">Проєкт GNOME</developer_name>
+  <developer_name xml:lang="ug">GNOME قۇرۇلۇشى</developer_name>
+  <developer_name xml:lang="tr">GNOME Projesi</developer_name>
+  <developer_name xml:lang="th">โครงการ GNOME</developer_name>
+  <developer_name xml:lang="sv">GNOME-projektet</developer_name>
+  <developer_name xml:lang="sr-Latn">Gnom projekat</developer_name>
+  <developer_name xml:lang="sr-Cyrl">Гном пројекат</developer_name>
+  <developer_name xml:lang="sl">Projekt GNOME</developer_name>
+  <developer_name xml:lang="sk">Projekt GNOME</developer_name>
+  <developer_name xml:lang="rw">Umushinga wa GNOME</developer_name>
+  <developer_name xml:lang="ru">Проект GNOME</developer_name>
+  <developer_name xml:lang="ro">Proiectul GNOME</developer_name>
+  <developer_name xml:lang="pt-BR">O Projeto GNOME</developer_name>
+  <developer_name xml:lang="pt">O Projeto GNOME</developer_name>
+  <developer_name xml:lang="pl">Projekt GNOME</developer_name>
+  <developer_name xml:lang="pa">ਗਨੋਮ ਪਰੋਜੈਕਟ</developer_name>
+  <developer_name xml:lang="oc">Lo projècte GNOME</developer_name>
+  <developer_name xml:lang="nl">Het GNOME-project</developer_name>
+  <developer_name xml:lang="ne">जिनोम परियोजना</developer_name>
+  <developer_name xml:lang="nb">GNOME</developer_name>
+  <developer_name xml:lang="lv">GNOME projekts</developer_name>
+  <developer_name xml:lang="lt">GNOME projektas</developer_name>
+  <developer_name xml:lang="kw">An Ragdres GNOME</developer_name>
+  <developer_name xml:lang="ko">그놈 프로젝트</developer_name>
+  <developer_name xml:lang="kk-Cyrl">GNOME жобасы</developer_name>
+  <developer_name xml:lang="kab">Asenfar n GNOME</developer_name>
+  <developer_name xml:lang="ka">პროექტი "GNOME"</developer_name>
+  <developer_name xml:lang="ja">The GNOME Project</developer_name>
+  <developer_name xml:lang="it">Il progetto GNOME</developer_name>
+  <developer_name xml:lang="id">Proyek GNOME</developer_name>
+  <developer_name xml:lang="ia">Le projecto GNOME</developer_name>
+  <developer_name xml:lang="hu">A GNOME projekt</developer_name>
+  <developer_name xml:lang="hi">गनोम परियोजना</developer_name>
+  <developer_name xml:lang="he">מיזם GNOME</developer_name>
+  <developer_name xml:lang="gl">O Proxecto GNOME</developer_name>
+  <developer_name xml:lang="fur">Il progjet GNOME</developer_name>
+  <developer_name xml:lang="fr">Le projet GNOME</developer_name>
+  <developer_name xml:lang="fil">Proyekto GNOME</developer_name>
+  <developer_name xml:lang="fi">Gnome-projekti</developer_name>
+  <developer_name xml:lang="fa">پروژهٔ گنوم</developer_name>
+  <developer_name xml:lang="eu">GNOME proiektua</developer_name>
+  <developer_name xml:lang="es">El Proyecto GNOME</developer_name>
+  <developer_name xml:lang="eo">La GNOME-Projekto</developer_name>
+  <developer_name xml:lang="en-GB">The GNOME Project</developer_name>
+  <developer_name xml:lang="el">Το έργο GNOME</developer_name>
+  <developer_name xml:lang="de">Das GNOME-Projekt</developer_name>
+  <developer_name xml:lang="da">GNOME-projektet</developer_name>
+  <developer_name xml:lang="cs">Projekt GNOME</developer_name>
+  <developer_name xml:lang="ca">El projecte GNOME</developer_name>
+  <developer_name xml:lang="bg">Проектът GNOME</developer_name>
+  <developer_name xml:lang="be-Cyrl">Праект GNOME</developer_name>
+  <developer_name xml:lang="ar">مشروع جنوم</developer_name>
+  <developer id="org.gnome">
+    <name>The GNOME Project</name>
+    <name xml:lang="zh-Hant-TW">GNOME 專案</name>
+    <name xml:lang="zh-Hans-CN">GNOME 项目</name>
+    <name xml:lang="vi">Dự án GNOME</name>
+    <name xml:lang="uz-Latn">GNOME loyihasi</name>
+    <name xml:lang="uk">Проєкт GNOME</name>
+    <name xml:lang="ug">GNOME قۇرۇلۇشى</name>
+    <name xml:lang="tr">GNOME Projesi</name>
+    <name xml:lang="th">โครงการ GNOME</name>
+    <name xml:lang="sv">GNOME-projektet</name>
+    <name xml:lang="sr-Latn">Gnom projekat</name>
+    <name xml:lang="sr-Cyrl">Гном пројекат</name>
+    <name xml:lang="sl">Projekt GNOME</name>
+    <name xml:lang="sk">Projekt GNOME</name>
+    <name xml:lang="rw">Umushinga wa GNOME</name>
+    <name xml:lang="ru">Проект GNOME</name>
+    <name xml:lang="ro">Proiectul GNOME</name>
+    <name xml:lang="pt-BR">O Projeto GNOME</name>
+    <name xml:lang="pt">O Projeto GNOME</name>
+    <name xml:lang="pl">Projekt GNOME</name>
+    <name xml:lang="pa">ਗਨੋਮ ਪਰੋਜੈਕਟ</name>
+    <name xml:lang="oc">Lo projècte GNOME</name>
+    <name xml:lang="nl">Het GNOME-project</name>
+    <name xml:lang="ne">जिनोम परियोजना</name>
+    <name xml:lang="nb">GNOME</name>
+    <name xml:lang="lv">GNOME projekts</name>
+    <name xml:lang="lt">GNOME projektas</name>
+    <name xml:lang="kw">An Ragdres GNOME</name>
+    <name xml:lang="ko">그놈 프로젝트</name>
+    <name xml:lang="kk-Cyrl">GNOME жобасы</name>
+    <name xml:lang="kab">Asenfar n GNOME</name>
+    <name xml:lang="ka">პროექტი "GNOME"</name>
+    <name xml:lang="ja">The GNOME Project</name>
+    <name xml:lang="it">Il progetto GNOME</name>
+    <name xml:lang="id">Proyek GNOME</name>
+    <name xml:lang="ia">Le projecto GNOME</name>
+    <name xml:lang="hu">A GNOME projekt</name>
+    <name xml:lang="hi">गनोम परियोजना</name>
+    <name xml:lang="he">מיזם GNOME</name>
+    <name xml:lang="gl">O Proxecto GNOME</name>
+    <name xml:lang="fur">Il progjet GNOME</name>
+    <name xml:lang="fr">Le projet GNOME</name>
+    <name xml:lang="fil">Proyekto GNOME</name>
+    <name xml:lang="fi">Gnome-projekti</name>
+    <name xml:lang="fa">پروژهٔ گنوم</name>
+    <name xml:lang="eu">GNOME proiektua</name>
+    <name xml:lang="es">El Proyecto GNOME</name>
+    <name xml:lang="eo">La GNOME-Projekto</name>
+    <name xml:lang="en-GB">The GNOME Project</name>
+    <name xml:lang="el">Το έργο GNOME</name>
+    <name xml:lang="de">Das GNOME-Projekt</name>
+    <name xml:lang="da">GNOME-projektet</name>
+    <name xml:lang="cs">Projekt GNOME</name>
+    <name xml:lang="ca">El projecte GNOME</name>
+    <name xml:lang="bg">Проектът GNOME</name>
+    <name xml:lang="be-Cyrl">Праект GNOME</name>
+    <name xml:lang="ar">مشروع جنوم</name>
+  </developer>
+  <update_contact>msandova@gnome.org</update_contact>
+  <translation type="gettext">snapshot</translation>
+  <launchable type="desktop-id">org.gnome.Snapshot.desktop</launchable>
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  <provides>
+    <binary>snapshot</binary>
+  </provides>
+  <branding>
+    <!-- Blue 2 and Purple 3 -->
+    <color type="primary" scheme_preference="light">#62a0ea</color>
+    <color type="primary" scheme_preference="dark">#9141ac</color>
+  </branding>
+</component>
