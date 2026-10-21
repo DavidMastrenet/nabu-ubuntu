@@ -1,0 +1,3 @@
+# Re-evaluate the Type-C power role whenever the port or its partner changes,
+# so plugging a charger switches the port back to sink.
+SUBSYSTEM=="typec", ACTION=="change", TAG+="systemd", ENV{SYSTEMD_WANTS}="nabu-typec-sink.service"

@@ -34,6 +34,9 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 - 自动旋转、触屏坐标及休眠后的恢复。
 - 原装磁吸键盘休眠唤醒后自动恢复连接。
 - 扬声器、麦克风配置、RTC 选择和启动成功标记。
+- rEFInd 快速启动：`timeout 2`、引入主题图标（`include themes/refind-theme-regular/theme.conf` 并显式指定 Ubuntu 图标）、只保留 `GopRotate` 驱动，消除"找不到图标"导致的长时间卡顿。
+- Wi-Fi MAC 固定：`ath10k` 在本机没有板级地址，NetworkManager 配置为 `wifi.cloned-mac-address=stable`，不再每次启动随机。
+- Type-C 取电角色：一次性服务加 udev 规则向 `/sys/class/typec/port0/power_role` 写入 `sink`，让充电器被正常接受，而不是由平板对外供电。
 
 已在本机检查重启、休眠唤醒、相机切换、自动对焦、显示、触屏、旋转、键盘、扬声器和麦克风，也检查了 USB-PD 充电。
 

@@ -50,7 +50,7 @@ while IFS= read -r -d '' source; do
     install -D -m644 "$source" "/$relative"
 done < <(find "$REPO/rootfs" -type f -print0)
 chmod 755 /usr/local/bin/{nabu-autorotate,nabu-camera,qbootctl} \
-    /usr/local/sbin/{nabu-sensor-start,nabu-keyboard-resume} \
+    /usr/local/sbin/{nabu-sensor-start,nabu-keyboard-resume,nabu-typec-sink} \
     /usr/local/libexec/nabu/hexagonrpcd /usr/local/libexec/iio-sensor-proxy \
     /usr/lib/systemd/system-sleep/nabu-keyboard \
     /opt/nabu-snapshot/bin/snapshot /opt/nabu-camera/libexec/libcamera/soft_ipa_proxy
@@ -80,6 +80,7 @@ glib-compile-schemas /opt/nabu-snapshot/share/glib-2.0/schemas
 update-desktop-database /usr/local/share/applications
 systemctl daemon-reload
 systemctl enable nabu-sensors.service nabu-mark-boot-success.service
+systemctl enable nabu-typec-sink.service
 udevadm control --reload-rules
 usermod -aG video "$TARGET_USER"
 timedatectl set-timezone Asia/Shanghai
@@ -91,13 +92,37 @@ install -Dm644 "$REPO/boot/6.14.11-camera-autofocus.efi" /boot/efi/EFI/ubuntu/6.
 python3 - <<'PY'
 from pathlib import Path
 import re
+
 p = Path('/boot/efi/EFI/BOOT/refind.conf')
 s = p.read_text()
 s, count = re.subn(r'(?m)^(\s*loader\s+)/EFI/ubuntu/\S+\.efi\s*$',
                    r'\1/EFI/ubuntu/6.14.11-camera-autofocus.efi', s)
 if count != 1:
     raise SystemExit('Expected exactly one Ubuntu loader entry in refind.conf')
+
+# The theme supplies the icon set; without the include rEFInd warns "no icon"
+# and stalls on its placeholder before the menu appears.
+theme = 'include themes/refind-theme-regular/theme.conf'
+if theme not in s:
+    s = s.replace('menuentry "Ubuntu"', theme + '\nmenuentry "Ubuntu"', 1)
+
+icon = '    icon /EFI/BOOT/themes/refind-theme-regular/icons/256-96/os_ubuntu.png'
+if icon not in s:
+    s = s.replace('    loader /EFI/ubuntu/6.14.11-camera-autofocus.efi',
+                  '    loader /EFI/ubuntu/6.14.11-camera-autofocus.efi\n' + icon, 1)
+
 p.write_text(s)
+
+# Only GopRotate is needed; every other filesystem driver just lengthens the
+# rEFInd start-up scan.
+drivers = Path('/boot/efi/EFI/BOOT/drivers')
+disabled = Path('/boot/efi/EFI/BOOT/drivers-disabled')
+if drivers.is_dir():
+    disabled.mkdir(exist_ok=True)
+    for name in ('btrfs', 'ext2', 'ext4', 'hfs', 'iso9660', 'reiserfs'):
+        driver = drivers / f'{name}_aa64.efi'
+        if driver.exists():
+            driver.rename(disabled / driver.name)
 PY
 uid="$(id -u "$TARGET_USER")"
 if [[ -S "/run/user/$uid/bus" ]]; then

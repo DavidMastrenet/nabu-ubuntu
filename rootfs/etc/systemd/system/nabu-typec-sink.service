@@ -1,0 +1,13 @@
+[Unit]
+Description=Put the nabu Type-C port into sink (charging) role
+After=multi-user.target
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/nabu-typec-sink
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

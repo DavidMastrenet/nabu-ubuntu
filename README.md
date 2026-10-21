@@ -34,6 +34,9 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 - Automatic screen rotation and touch coordinates, including after suspend.
 - Original magnetic keyboard reconnects automatically after suspend.
 - Speaker and microphone configuration, RTC selection and boot-success marking.
+- Fast rEFInd menu: `timeout 2`, the theme's icon set (`include themes/refind-theme-regular/theme.conf` plus an explicit Ubuntu icon) and only the `GopRotate` driver, so there is no "no icon" stall before the menu.
+- Stable Wi-Fi MAC: `ath10k` has no board address on nabu, so NetworkManager is configured with `wifi.cloned-mac-address=stable` instead of a random address per boot.
+- Type-C sink role: a oneshot service and udev rule write `sink` into `/sys/class/typec/port0/power_role`, so a charger is accepted instead of the tablet sourcing the port.
 
 Reboot, suspend/resume, camera switching, autofocus, display, touch, rotation, keyboard, speakers and microphone were checked on the target tablet. USB-PD charging was also checked.
 
