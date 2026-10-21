@@ -16,7 +16,7 @@ tar -xf source.tar.gz -C linux --strip-components=1
 rm source.tar.gz
 fi
 cp "$REPO/source/kernel/config-6.17.0-nabu" linux/.config
-linux/scripts/config --file linux/.config --set-str LOCALVERSION '-xiaomi-nabu' --disable LOCALVERSION_AUTO --disable DEBUG_INFO --disable DEBUG_INFO_BTF --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT --enable DEBUG_INFO_NONE
+linux/scripts/config --file linux/.config --set-str LOCALVERSION '-xiaomi-nabu' --disable LOCALVERSION_AUTO --disable DEBUG_INFO --disable DEBUG_INFO_BTF --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT --enable DEBUG_INFO_NONE --module TOUCHSCREEN_NT36523_SPI --module BATTERY_QCOM_FG --module SND_SOC_SM8150
 make -C linux olddefconfig
 make -C linux -j"$(nproc)" modules_prepare
 local failed=0
