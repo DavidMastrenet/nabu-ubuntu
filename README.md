@@ -40,6 +40,26 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 
 Reboot, suspend/resume, camera switching, autofocus, display, touch, rotation, keyboard, speakers and microphone were checked on the target tablet. USB-PD charging was also checked.
 
+## Brightness and magnetic cover
+
+The desktop remembers brightness in `~/.local/state/nabu-brightness.json` and restores it after login. Idle dimming and ambient brightness are disabled. Closing the magnetic cover powers off the panel; opening it powers the panel on. USB networking and SSH remain available while the cover is closed. These fixes can be installed separately without changing the kernel, boot image, or installed applications:
+
+```sh
+sudo bash configure-display.sh "$USER"
+```
+
+Run this from the logged-in GNOME desktop. If installed over SSH before desktop login, apply the settings from a desktop terminal:
+
+```sh
+gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
+gsettings set org.gnome.settings-daemon.plugins.power ambient-enabled false
+gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action nothing
+gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action nothing
+systemctl --user restart nabu-display-state.service
+```
+
+On the tested boot image, the live device tree exposes `1,code` and `1,input-type` in the GPIO keys node, and the kernel rejects it with `Button without keycode`. The installed DTB files have the correct `linux,` properties. `nabu-lid-switch` reads TLMM GPIO9, with active-low polarity and 15 ms debounce, and exposes `SW_LID` through uinput. It exits without claiming the GPIO if a native lid switch is already present. `nabu-display-state` uses UPower and Mutter to control display power because the GNOME lid-action setting alone did not blank this tablet.
+
 ## Build
 
 Build on Ubuntu 26.04 ARM64. Install the runtime first, then:

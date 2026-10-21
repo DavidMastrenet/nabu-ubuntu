@@ -1,0 +1,102 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Remember deliberate GNOME backlight adjustments, and restore after login."""
+import json
+import os
+from pathlib import Path
+from gi.repository import Gio, GLib
+
+STATE = Path.home() / '.local/state/nabu-brightness.json'
+BUS = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+SYSTEM_BUS = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+DEST = 'org.gnome.Mutter.DisplayConfig'
+OBJ = '/org/gnome/Mutter/DisplayConfig'
+IFACE = DEST
+restored = False
+pending = None
+lid_was_closed = None
+last_error = None
+
+
+def saved_state():
+    try:
+        result = json.loads(STATE.read_text())
+        return result if isinstance(result, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def call(dest, path, iface, method, args=None, signature=None):
+    return BUS.call_sync(dest, path, iface, method, args,
+                         GLib.VariantType.new(signature) if signature else None,
+                         Gio.DBusCallFlags.NONE, 3000, None).unpack()
+
+
+def prop(name):
+    return call(DEST, OBJ, 'org.freedesktop.DBus.Properties', 'Get',
+                GLib.Variant('(ss)', (IFACE, name)))[0]
+
+
+def panel():
+    serial, outputs = prop('Backlight')
+    return serial, next(o for o in outputs if o.get('active') and o.get('connector') == 'DSI-1')
+
+
+def tick():
+    global restored, pending, lid_was_closed, last_error
+    try:
+        closed = SYSTEM_BUS.call_sync(
+            'org.freedesktop.UPower', '/org/freedesktop/UPower',
+            'org.freedesktop.DBus.Properties', 'Get',
+            GLib.Variant('(ss)', ('org.freedesktop.UPower', 'LidIsClosed')),
+            None, Gio.DBusCallFlags.NONE, 3000, None).unpack()[0]
+        if closed and prop('PowerSaveMode') != 3:
+            call(DEST, OBJ, 'org.freedesktop.DBus.Properties', 'Set',
+                 GLib.Variant('(ssv)', (IFACE, 'PowerSaveMode', GLib.Variant('i', 3))))
+            print('Lid closed: display powered off', flush=True)
+        elif not closed and lid_was_closed:
+            call(DEST, OBJ, 'org.freedesktop.DBus.Properties', 'Set',
+                 GLib.Variant('(ssv)', (IFACE, 'PowerSaveMode', GLib.Variant('i', 0))))
+            print('Lid opened: display powered on', flush=True)
+        lid_was_closed = closed
+        if closed:
+            pending = None
+            return True
+        serial, output = panel()
+        value = output['value']
+        if not restored:
+            saved = saved_state()
+            try:
+                target = int(saved.get('value', value))
+            except (ValueError, TypeError):
+                target = value
+            target = max(output['min'], min(output['max'], target))
+            call(DEST, OBJ, IFACE, 'SetBacklight',
+                 GLib.Variant('(usi)', (serial, output['connector'], target)))
+            restored = True
+            print(f'Restored brightness {target}/{output["max"]}', flush=True)
+            return True
+        # Automatic dimming is disabled by the installer. Never save blanking.
+        if prop('PowerSaveMode') != 0 or value <= 0:
+            pending = None
+            return True
+        if pending != value:
+            pending = value
+            return True
+        saved = saved_state()
+        if saved.get('value') != value:
+            STATE.parent.mkdir(parents=True, exist_ok=True)
+            tmp = STATE.with_suffix('.tmp')
+            tmp.write_text(json.dumps({'value': value, 'max': output['max']}) + '\n')
+            os.replace(tmp, STATE)
+            print(f'Saved brightness {value}/{output["max"]}', flush=True)
+        last_error = None
+    except (GLib.Error, StopIteration, OSError, ValueError, KeyError) as error:
+        if str(error) != last_error:
+            print(f'Waiting for display: {error}', flush=True)
+            last_error = str(error)
+    return True
+
+
+GLib.timeout_add_seconds(2, tick)
+GLib.MainLoop().run()

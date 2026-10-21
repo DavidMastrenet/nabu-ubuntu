@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Expose the Xiaomi Pad 5 GPIO9 Hall sensor as a standard SW_LID input."""
+import fcntl
+import glob
+import os
+import struct
+import time
+from datetime import timedelta
+import gpiod
+from gpiod.line import Direction, Edge, Value
+from pathlib import Path
+
+for switch in Path('/sys/class/input').glob('event*/device/capabilities/sw'):
+    if int(switch.read_text().replace(' ', '').strip(), 16) & 1:
+        print('Native lid switch already available; GPIO bridge not needed', flush=True)
+        raise SystemExit(0)
+
+chip_path = None
+for path in glob.glob('/dev/gpiochip*'):
+    with gpiod.Chip(path) as chip:
+        info = chip.get_info()
+        if info.num_lines == 176 and ('pinctrl' in info.label or 'tlmm' in info.label):
+            chip_path = path
+            break
+if chip_path is None:
+    raise RuntimeError('SM8150 TLMM GPIO controller not found')
+
+with gpiod.request_lines(chip_path, consumer='nabu-lid-switch', config={
+    9: gpiod.LineSettings(direction=Direction.INPUT, edge_detection=Edge.BOTH,
+                          active_low=True, debounce_period=timedelta(milliseconds=15))
+}) as lines:
+    fd = os.open('/dev/uinput', os.O_WRONLY | os.O_NONBLOCK)
+    try:
+        fcntl.ioctl(fd, 0x40045564, 5)  # UI_SET_EVBIT EV_SW
+        fcntl.ioctl(fd, 0x4004556d, 0)  # UI_SET_SWBIT SW_LID
+        setup = struct.pack('HHHH80sI', 0x19, 0x2717, 0x0005, 1,
+                            b'Xiaomi Pad 5 Hall Lid Switch', 0)
+        fcntl.ioctl(fd, 0x405c5503, setup)  # UI_DEV_SETUP
+        fcntl.ioctl(fd, 0x5501)  # UI_DEV_CREATE
+        time.sleep(1)  # Allow udev, logind and UPower to enumerate the switch.
+
+        def report():
+            closed = int(lines.get_value(9) == Value.ACTIVE)
+            os.write(fd, struct.pack('llHHi', 0, 0, 5, 0, closed))
+            os.write(fd, struct.pack('llHHi', 0, 0, 0, 0, 0))
+            print('Lid ' + ('closed' if closed else 'open'), flush=True)
+
+        report()
+        while True:
+            if lines.wait_edge_events(timedelta(seconds=30)):
+                lines.read_edge_events()
+                report()
+    finally:
+        fcntl.ioctl(fd, 0x5502)
+        os.close(fd)

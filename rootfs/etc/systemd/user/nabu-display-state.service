@@ -1,0 +1,13 @@
+[Unit]
+Description=Xiaomi Pad 5 brightness memory and lid display power
+PartOf=graphical-session.target
+After=graphical-session-pre.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/bin/nabu-display-state
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target

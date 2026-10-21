@@ -81,6 +81,7 @@ update-desktop-database /usr/local/share/applications
 systemctl daemon-reload
 systemctl enable nabu-sensors.service nabu-mark-boot-success.service
 systemctl enable nabu-typec-sink.service
+bash "$REPO/configure-display.sh" "$TARGET_USER"
 udevadm control --reload-rules
 usermod -aG video "$TARGET_USER"
 timedatectl set-timezone Asia/Shanghai

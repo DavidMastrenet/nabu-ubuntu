@@ -7,6 +7,7 @@
 *.conf          text eol=lf
 *.md            text eol=lf
 rootfs/usr/local/sbin/*   text eol=lf
+rootfs/usr/local/bin/nabu-display-state text eol=lf
 boot/EFI/BOOT/refind.conf text eol=lf
 
 # Binary payloads must never be normalised.

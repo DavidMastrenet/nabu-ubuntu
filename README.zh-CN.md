@@ -40,6 +40,30 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 
 已在本机检查重启、休眠唤醒、相机切换、自动对焦、显示、触屏、旋转、键盘、扬声器和麦克风，也检查了 USB-PD 充电。
 
+## 亮度与磁吸保护盖
+
+桌面将亮度保存在 `~/.local/state/nabu-brightness.json`，登录后恢复上次设置。安装程序会关闭闲置调暗和环境光调节。磁吸保护盖合上时关闭屏幕，打开时点亮，合盖期间 USB 网络和 SSH 保持连接。
+
+已有系统可以单独安装这组修复，内核、启动镜像和已装应用均保持原样。在已登录的 GNOME 桌面终端执行：
+
+```sh
+sudo bash configure-display.sh "$USER"
+```
+
+如果在桌面登录前通过 SSH 安装，登录后执行：
+
+```sh
+gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
+gsettings set org.gnome.settings-daemon.plugins.power ambient-enabled false
+gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action nothing
+gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action nothing
+systemctl --user restart nabu-display-state.service
+```
+
+本机运行中的设备树将 GPIO 按键属性显示为 `1,code` 和 `1,input-type`，内核因此报错 `Button without keycode`；磁盘上的 DTB 属性仍为正常的 `linux,` 前缀。`nabu-lid-switch` 从 TLMM GPIO9 读取霍尔传感器，以低电平表示合盖，消抖时间为 15 毫秒，再经 uinput 上报标准盖子开关。检测到已有原生盖子开关时，服务直接退出。
+
+实测 GNOME 自带的合盖动作设置没有关闭这台平板的屏幕，因此由 `nabu-display-state` 读取 UPower 状态，再调用 Mutter 控制屏幕电源。亮度保存会跳过合盖和息屏状态，防止把屏幕关闭时的数值记作用户亮度。
+
 ## 编译
 
 在 Ubuntu 26.04 ARM64 上编译。先安装运行文件，再执行：
