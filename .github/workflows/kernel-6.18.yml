@@ -11,8 +11,24 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y build-essential flex bison bc libssl-dev libelf-dev curl device-tree-compiler systemd-ukify
-      - name: Build full BSP and board modules
-        run: bash source/kernel/build-6.18.sh
+      - uses: actions/cache/restore@v4
+        id: kernel-cache
+        with:
+          path: .build/kernel-6.18/linux
+          key: nabu-6.18-140e8f87-${{ hashFiles('source/kernel/config-6.17.0-nabu') }}
+      - name: Check all board driver APIs
+        run: bash source/kernel/build-6.18.sh prepare
+      - name: Build full BSP kernel and base modules
+        run: bash source/kernel/build-6.18.sh base
+      - uses: actions/cache/save@v4
+        if: steps.kernel-cache.outputs.cache-hit != 'true'
+        with:
+          path: .build/kernel-6.18/linux
+          key: ${{ steps.kernel-cache.outputs.cache-primary-key }}
+      - name: Build and link board drivers
+        run: bash source/kernel/build-6.18.sh overlays
+      - name: Package EFI and complete kernel
+        run: bash source/kernel/build-6.18.sh package
       - uses: actions/upload-artifact@v4
         with:
           name: nabu-kernel-6.18
