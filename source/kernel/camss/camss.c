@@ -2202,6 +2202,26 @@ void camss_disable_clocks(int nclocks, struct camss_clock *clock)
  *
  * Return a pointer to sensor media entity or NULL if not found
  */
+static struct media_pad *camss_find_sensor_pad(struct media_entity *entity)
+{
+	struct media_pad *pad;
+
+	while (1) {
+		pad = &entity->pads[0];
+		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+			return NULL;
+
+		pad = media_pad_remote_pad_first(pad);
+		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+			return NULL;
+
+		entity = pad->entity;
+
+		if (entity->function == MEDIA_ENT_F_CAM_SENSOR)
+			return pad;
+	}
+}
+
 struct media_entity *camss_find_sensor(struct media_entity *entity)
 {
 	struct media_pad *pad;

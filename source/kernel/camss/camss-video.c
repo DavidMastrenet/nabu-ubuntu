@@ -602,7 +602,7 @@ static int video_open(struct file *file)
 	}
 
 	v4l2_fh_init(vfh, vdev);
-	v4l2_fh_add(vfh);
+	v4l2_fh_add(vfh, file);
 
 	file->private_data = vfh;
 
