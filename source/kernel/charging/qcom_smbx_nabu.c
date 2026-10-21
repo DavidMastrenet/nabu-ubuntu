@@ -659,6 +659,9 @@ static int smb_set_current_limit(struct smb_chip *chip, unsigned int val)
 {
 	unsigned char val_raw;
 
+	/* Keep the board limit even when the fuel-gauge policy requests more. */
+	val = min(val, 500000U);
+
 	if (val > chip->icl_max_ua) {
 		dev_err(chip->dev,
 			"Can't set current limit higher than %uuA",

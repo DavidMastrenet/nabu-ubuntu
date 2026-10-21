@@ -15,12 +15,15 @@ mkdir linux
 tar -xf source.tar.gz -C linux --strip-components=1
 rm source.tar.gz
 fi
-cp "$REPO/source/kernel/config-6.17.0-nabu" linux/.config
+cp "$REPO/source/kernel/config-6.18.0-nabu" linux/.config
 linux/scripts/config --file linux/.config --set-str LOCALVERSION '-xiaomi-nabu' --disable LOCALVERSION_AUTO --disable DEBUG_INFO --disable DEBUG_INFO_BTF --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT --enable DEBUG_INFO_NONE --module TOUCHSCREEN_NT36523_SPI --module BATTERY_QCOM_FG --module SND_SOC_SM8150
 make -C linux olddefconfig
+for option in TOUCHSCREEN_NT36523_SPI BATTERY_QCOM_FG SND_SOC_SM8150; do
+    grep -qx "CONFIG_$option=m" linux/.config
+done
 make -C linux -j"$(nproc)" modules_prepare
 local failed=0
-for component in camera-sensors camera-clocks camera-cci fastrpc-fixed camss charging; do
+for component in camera-sensors camera-clocks camera-cci fastrpc-fixed camss charging audio; do
     mkdir -p "$BUILD/$component"
     cp -a "$REPO/source/kernel/$component/." "$BUILD/$component/"
     if ! make -C "$BUILD/linux" M="$BUILD/$component" CONFIG_VIDEO_QCOM_CAMSS=m KBUILD_MODPOST_WARN=1 -k -j"$(nproc)" modules > "$BUILD/$component-preflight.log" 2>&1; then
@@ -40,7 +43,7 @@ make -C linux INSTALL_MOD_PATH="$BUILD/package" INSTALL_MOD_STRIP=1 modules_inst
 }
 overlays() {
 KERNEL="$(make -s -C linux kernelrelease)"
-for component in camera-sensors camera-clocks camera-cci fastrpc-fixed camss charging; do
+for component in camera-sensors camera-clocks camera-cci fastrpc-fixed camss charging audio; do
     mkdir -p "$BUILD/$component"
     cp -a "$REPO/source/kernel/$component/." "$BUILD/$component/"
     make -C "$BUILD/linux" M="$BUILD/$component" CONFIG_VIDEO_QCOM_CAMSS=m -j"$(nproc)" modules

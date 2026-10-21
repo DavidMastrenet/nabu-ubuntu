@@ -15,7 +15,8 @@ jobs:
         id: kernel-cache
         with:
           path: .build/kernel-6.18/linux
-          key: nabu-6.18-140e8f87-${{ hashFiles('source/kernel/config-6.17.0-nabu') }}
+          key: nabu-6.18-140e8f87-${{ hashFiles('source/kernel/config-6.18.0-nabu') }}
+          restore-keys: nabu-6.18-140e8f87-
       - name: Check all board driver APIs
         run: bash source/kernel/build-6.18.sh prepare
       - name: Build full BSP kernel and base modules
