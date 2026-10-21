@@ -2233,16 +2233,13 @@ struct media_entity *camss_find_sensor(struct media_entity *entity)
 s64 camss_get_link_freq(struct media_entity *entity, unsigned int bpp,
 			unsigned int lanes)
 {
-	struct media_entity *sensor;
-	struct v4l2_subdev *subdev;
+	struct media_pad *sensor_pad;
 
-	sensor = camss_find_sensor(entity);
-	if (!sensor)
+	sensor_pad = camss_find_sensor_pad(entity);
+	if (!sensor_pad)
 		return -ENODEV;
 
-	subdev = media_entity_to_v4l2_subdev(sensor);
-
-	return v4l2_get_link_freq(subdev->ctrl_handler, bpp, 2 * lanes);
+	return v4l2_get_link_freq(sensor_pad, bpp, 2 * lanes);
 }
 
 /*

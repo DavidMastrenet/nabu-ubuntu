@@ -18,16 +18,18 @@ cp "$REPO/source/kernel/config-6.17.0-nabu" linux/.config
 linux/scripts/config --file linux/.config --set-str LOCALVERSION '-xiaomi-nabu' --disable LOCALVERSION_AUTO --disable DEBUG_INFO --disable DEBUG_INFO_BTF --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT --enable DEBUG_INFO_NONE
 make -C linux olddefconfig
 make -C linux -j"$(nproc)" modules_prepare
+local failed=0
 for component in camera-sensors camera-clocks camera-cci fastrpc-fixed camss charging; do
     mkdir -p "$BUILD/$component"
     cp -a "$REPO/source/kernel/$component/." "$BUILD/$component/"
-    if ! make -C "$BUILD/linux" M="$BUILD/$component" CONFIG_VIDEO_QCOM_CAMSS=m KBUILD_MODPOST_WARN=1 -j"$(nproc)" modules > "$BUILD/$component-preflight.log" 2>&1; then
+    if ! make -C "$BUILD/linux" M="$BUILD/$component" CONFIG_VIDEO_QCOM_CAMSS=m KBUILD_MODPOST_WARN=1 -k -j"$(nproc)" modules > "$BUILD/$component-preflight.log" 2>&1; then
         cat "$BUILD/$component-preflight.log"
-        return 1
+        failed=1
     fi
     make -C "$BUILD/linux" M="$BUILD/$component" clean
-    echo "API preflight passed: $component"
+    echo "API preflight completed: $component"
 done
+return "$failed"
 }
 base() {
 make -C linux -j"$(nproc)" Image modules
