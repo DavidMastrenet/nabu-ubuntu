@@ -2,12 +2,12 @@
 
 [English](README.md)
 
-适用于 Ubuntu 26.04 ARM64、内核 `6.14.11-nabu-tmm`，包含驱动、运行文件和源码修改。仅适用于**小米平板 5**，不适用于 Pad 5 Pro。使用纯 Linux 系统，Ubuntu 镜像另行下载。
+适用于 Ubuntu 26.04 ARM64、内核 `6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`，包含驱动、运行文件和源码修改。仅适用于**小米平板 5**，不适用于 Pad 5 Pro。使用纯 Linux 系统，Ubuntu 镜像另行下载。
 
 ## 安装
 
 1. 解锁 BL，按上游说明安装 [nabu Ubuntu 26.04 基础镜像](https://github.com/TheMojoMan/xiaomi-nabu/releases/tag/ubuntu-26.04-v1.0.0)。根分区名称须为 `linux`，EFI 分区挂载到 `/boot/efi`。保留高通固件分区和本机的 `persist` 分区。
-2. 完成桌面账户设置并连接 Wi-Fi，将本仓库复制到平板。
+2. 完成桌面账户设置并连接 Wi-Fi。系统须已安装匹配的 6.17 BSP 内核文件 `/boot/vmlinuz-6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`，再将本仓库复制到平板。
 3. 在仓库目录执行：
 
    ```sh
@@ -38,9 +38,9 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 - Wi-Fi MAC 固定：`ath10k` 在本机没有板级地址，NetworkManager 配置为 `wifi.cloned-mac-address=stable`，不再每次启动随机。
 - Type-C 取电角色：一次性服务加 udev 规则向 `/sys/class/typec/port0/power_role` 写入 `sink`，让充电器被正常接受，而不是由平板对外供电。
 
-已在本机检查重启、休眠唤醒、相机切换、自动对焦、显示、触屏、旋转、键盘、扬声器和麦克风，也检查了 USB-PD 充电。
+本次 6.17 更新已在平板启动验证。前后摄取帧、音频播放和旋转传感器读取均通过，桌面显示、触屏和 USB 网络正常。连续 180 秒的 37 次采样均显示电池正在充电，USB 输入电流为 480–483mA，温度保持 29°C，充电器健康状态为 Good。本次按设备所有者要求跳过 PD 硬件实测。
 
-Type-C 角色属性用方括号标记当前值，`source [sink]` 表示平板已处于受电模式。守护脚本读取方括号内的值，只有实际处于供电模式时才切换角色。当前内核配置下，电脑 USB 的 5V 连接仍会消耗电池；已验证的充电方式为 USB-PD。普通 5V 充电还需要适配 PM8150B SMB5 驱动和设备树，本版本尚未包含这部分功能。
+Type-C 角色属性用方括号标记当前值，`source [sink]` 表示平板已处于受电模式。SMB5 负责普通 5V USB 充电，输入限制为 500mA，充电电压目标为 4.35V。输入超过 5.5V 时，保护服务暂停 SMB5；LN8000 从 8V 起接管充电泵路径。驱动源码与来源见 [source/kernel/charging](source/kernel/charging/README.md)。
 
 ## 亮度与磁吸保护盖
 
@@ -62,9 +62,9 @@ gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action n
 systemctl --user restart nabu-display-state.service
 ```
 
-本机运行中的设备树将 GPIO 按键属性显示为 `1,code` 和 `1,input-type`，内核因此报错 `Button without keycode`；磁盘上的 DTB 属性仍为正常的 `linux,` 前缀。`nabu-lid-switch` 从 TLMM GPIO9 读取霍尔传感器，以低电平表示合盖，消抖时间为 15 毫秒，再经 uinput 上报标准盖子开关。检测到已有原生盖子开关时，服务直接退出。
+本版设备树将错误的 `1,code` 和 `1,input-type` 改为 `linux,code` 和 `linux,input-type`，由内核直接注册 GPIO9 霍尔开关和音量上键。此前模拟盖子开关的 GPIO 服务已移除。
 
-实测 GNOME 自带的合盖动作设置没有关闭这台平板的屏幕，因此由 `nabu-display-state` 读取 UPower 状态，再调用 Mutter 控制屏幕电源。亮度保存会跳过合盖和息屏状态，防止把屏幕关闭时的数值记作用户亮度。
+`nabu-display-state` 读取 UPower 上报的原生开合状态，再调用 Mutter 控制屏幕电源。亮度保存跳过合盖和息屏状态，防止把屏幕关闭时的数值记作用户亮度。
 
 ## 编译
 
@@ -75,7 +75,7 @@ bash build.sh
 bash build-kernel.sh
 ```
 
-`build.sh` 下载指定版本的 Ubuntu 源码包，应用仓库内的源码修改，编译并安装用户态组件。`build-kernel.sh` 将修改后的内核模块和 EFI 文件生成到 `.build/kernel`，不会自动安装；需要已有 `/boot/vmlinuz-6.14.11-nabu-tmm`。
+`build.sh` 下载指定版本的 Ubuntu 源码包，应用仓库内的源码修改，编译并安装用户态组件。`build-kernel.sh` 将修改后的内核模块和 EFI 文件生成到 `.build/kernel`，不会自动安装；需要已有匹配的 BSP 文件 `/boot/vmlinuz-6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`。脚本准备 Linux 6.17 编译头文件并重建驱动模块，EFI 使用本机已有的 BSP 内核镜像。
 
 `rootfs/` 存放运行文件，`boot/` 存放 EFI 和设备树，`source/` 存放修改后的源码及配套库。编译下载文件保存在 `.build/`。
 
@@ -83,7 +83,7 @@ bash build-kernel.sh
 
 保留基础镜像的 EFI 启动文件。需要恢复原启动项时，将 `/boot/efi/EFI/BOOT/refind.conf` 中 Ubuntu 的 `loader` 改回原路径；安装程序已将原配置保存在上述备份目录。无法启动 Ubuntu 时，可从恢复环境挂载 EFI 分区并恢复该配置。
 
-内核固定为 `6.14.11-nabu-tmm`。更换内核前需重新编译并验证这些模块。
+BSP 内核固定为 `6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`。更换内核前需重新编译并验证这些模块。
 
 ## 来源
 

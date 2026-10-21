@@ -6,10 +6,11 @@ BACKUP=/var/lib/nabu-ubuntu/before-install
 MODEL="$(tr -d '\0' </proc/device-tree/model)"
 [[ $EUID == 0 && "$MODEL" == 'Xiaomi Pad 5' ]]
 [[ "$(uname -m)" == aarch64 ]]
-[[ "$(uname -r)" == 6.14.11-nabu-tmm ]]
+KERNEL=6.17.0-xiaomi-nabu-tmm-UFS-slowdown+
+[[ -f "/boot/vmlinuz-$KERNEL" ]]
 . /etc/os-release
 [[ "$ID" == ubuntu && "$VERSION_CODENAME" == resolute ]]
-[[ -f "$REPO/boot/6.14.11-camera-autofocus.efi" ]]
+[[ -f "$REPO/boot/6.17.0-nabu-smb5.efi" ]]
 [[ -d /boot/efi/EFI ]]
 TARGET_USER="${1:-${SUDO_USER:-}}"
 if [[ -z "$TARGET_USER" || "$TARGET_USER" == root ]]; then
@@ -50,7 +51,7 @@ while IFS= read -r -d '' source; do
     install -D -m644 "$source" "/$relative"
 done < <(find "$REPO/rootfs" -type f -print0)
 chmod 755 /usr/local/bin/{nabu-autorotate,nabu-camera,qbootctl} \
-    /usr/local/sbin/{nabu-sensor-start,nabu-keyboard-resume,nabu-typec-sink} \
+    /usr/local/sbin/{nabu-sensor-start,nabu-keyboard-resume,nabu-typec-sink,nabu-charge-guard} \
     /usr/local/libexec/nabu/hexagonrpcd /usr/local/libexec/iio-sensor-proxy \
     /usr/lib/systemd/system-sleep/nabu-keyboard \
     /opt/nabu-snapshot/bin/snapshot /opt/nabu-camera/libexec/libcamera/soft_ipa_proxy
@@ -75,21 +76,21 @@ elif [[ -b /dev/disk/by-partlabel/persist ]]; then
     trap - EXIT
 fi
 ldconfig
-depmod -a 6.14.11-nabu-tmm
+depmod -a "$KERNEL"
 glib-compile-schemas /opt/nabu-snapshot/share/glib-2.0/schemas
 update-desktop-database /usr/local/share/applications
 systemctl daemon-reload
 systemctl enable nabu-sensors.service nabu-mark-boot-success.service
-systemctl enable nabu-typec-sink.service
+systemctl enable nabu-typec-sink.service nabu-charge-guard.service
 bash "$REPO/configure-display.sh" "$TARGET_USER"
 udevadm control --reload-rules
 usermod -aG video "$TARGET_USER"
 timedatectl set-timezone Asia/Shanghai
 timedatectl set-ntp true
-mapfile -t KERNEL_PACKAGES < <(dpkg-query -W -f='${binary:Package}\n' 'linux-image*' 'linux-headers*' 2>/dev/null | grep nabu || true)
+mapfile -t KERNEL_PACKAGES < <(dpkg-query -W -f='${binary:Package}\n' 'linux-image*' 'linux-headers*' 'xiaomi-nabu-linux*' 2>/dev/null | grep nabu || true)
 if ((${#KERNEL_PACKAGES[@]})); then apt-mark hold "${KERNEL_PACKAGES[@]}"; fi
 
-install -Dm644 "$REPO/boot/6.14.11-camera-autofocus.efi" /boot/efi/EFI/ubuntu/6.14.11-camera-autofocus.efi
+install -Dm644 "$REPO/boot/6.17.0-nabu-smb5.efi" /boot/efi/EFI/ubuntu/6.17.0-nabu-smb5.efi
 python3 - <<'PY'
 from pathlib import Path
 import re
@@ -97,7 +98,7 @@ import re
 p = Path('/boot/efi/EFI/BOOT/refind.conf')
 s = p.read_text()
 s, count = re.subn(r'(?m)^(\s*loader\s+)/EFI/ubuntu/\S+\.efi\s*$',
-                   r'\1/EFI/ubuntu/6.14.11-camera-autofocus.efi', s)
+                   r'\1/EFI/ubuntu/6.17.0-nabu-smb5.efi', s)
 if count != 1:
     raise SystemExit('Expected exactly one Ubuntu loader entry in refind.conf')
 
@@ -109,8 +110,8 @@ if theme not in s:
 
 icon = '    icon /EFI/BOOT/themes/refind-theme-regular/icons/256-96/os_ubuntu.png'
 if icon not in s:
-    s = s.replace('    loader /EFI/ubuntu/6.14.11-camera-autofocus.efi',
-                  '    loader /EFI/ubuntu/6.14.11-camera-autofocus.efi\n' + icon, 1)
+    s = s.replace('    loader /EFI/ubuntu/6.17.0-nabu-smb5.efi',
+                  '    loader /EFI/ubuntu/6.17.0-nabu-smb5.efi\n' + icon, 1)
 
 p.write_text(s)
 

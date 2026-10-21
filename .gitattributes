@@ -6,6 +6,8 @@
 *.rules         text eol=lf
 *.conf          text eol=lf
 *.md            text eol=lf
+*.dts           text eol=lf
+source/kernel/config-* text eol=lf
 rootfs/usr/local/sbin/*   text eol=lf
 rootfs/usr/local/bin/nabu-display-state text eol=lf
 boot/EFI/BOOT/refind.conf text eol=lf
@@ -16,3 +18,5 @@ boot/EFI/BOOT/refind.conf text eol=lf
 *.dtb   binary
 *.so*   binary
 *.pn    binary
+
+source/kernel/charging/* text eol=lf

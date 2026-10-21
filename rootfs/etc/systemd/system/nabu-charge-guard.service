@@ -1,0 +1,12 @@
+[Unit]
+Description=Guard Xiaomi Pad 5 USB charging temperature and PD handoff
+After=systemd-udev-trigger.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/sbin/nabu-charge-guard
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

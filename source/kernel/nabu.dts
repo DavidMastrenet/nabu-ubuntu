@@ -1,5 +1,8 @@
 /dts-v1/;
 / {
+
+
+
  interrupt-parent = <0x01>;
  #address-cells = <0x02>;
  #size-cells = <0x02>;
@@ -8,6 +11,15 @@
  chassis-type = "tablet";
  qcom,msm-id = <0x153 0x20002>;
  qcom,board-id = <0x30 0x00>;
+ nabu-smb5-battery {
+  compatible = "simple-battery";
+  voltage-min-design-microvolt = <3400000>;
+  voltage-max-design-microvolt = <4350000>;
+  constant-charge-voltage-max-microvolt = <4350000>;
+  constant-charge-current-max-microamp = <1000000>;
+  charge-full-design-microamp-hours = <8720000>;
+  phandle = <0x10000>;
+ };
  chosen {
  };
  clocks {
@@ -3772,7 +3784,7 @@
       interrupts = <0x00 0x08 0x00 0x03>;
       debounce = <0x3d09>;
       bias-pull-up;
-      1,code = <0x74>;
+      linux,code = <0x74>;
       status = "okay";
      };
      resin {
@@ -3781,7 +3793,7 @@
       debounce = <0x3d09>;
       bias-pull-up;
       status = "okay";
-      1,code = <0x72>;
+      linux,code = <0x72>;
      };
     };
     temp-alarm@2400 {
@@ -3881,6 +3893,16 @@
      reg = <0x800>;
      status = "disabled";
     };
+    charger@1000 {
+     compatible = "qcom,nabu-pm8150b-charger";
+     reg = <0x1000>;
+     interrupts = <0x02 0x13 0x04 0x03 0x02 0x12 0x02 0x03 0x02 0x16 0x01 0x01 0x02 0x13 0x07 0x01>;
+     interrupt-names = "usb-plugin", "bat-ov", "wdog-bark", "usbin-icl-change";
+     io-channels = <0xe4 0x07 0xe4 0x08>;
+     io-channel-names = "usbin_i", "usbin_v";
+     monitored-battery = <0x10000>;
+     phandle = <0x10001>;
+    };
     usb-vbus-regulator@1100 {
      compatible = "qcom,pm8150b-vbus-reg";
      status = "okay";
@@ -3941,6 +3963,16 @@
      #io-channel-cells = <0x01>;
      interrupts = <0x02 0x31 0x00 0x01>;
      phandle = <0xe4>;
+     channel@7 {
+      reg = <0x07>;
+      qcom,pre-scaling = <1 1>;
+      label = "usbin_i";
+     };
+     channel@8 {
+      reg = <0x08>;
+      qcom,pre-scaling = <1 16>;
+      label = "usbin_v";
+     };
      channel@0 {
       reg = <0x00>;
       qcom,pre-scaling = <0x01 0x01>;
@@ -5489,18 +5521,18 @@
   key-vol-up {
    label = "Volume Up";
    gpios = <0xe0 0x06 0x01>;
-   1,code = <0x73>;
+   linux,code = <0x73>;
    debounce-interval = <0x0f>;
-   1,can-disable;
+   linux,can-disable;
    wakeup-source;
   };
   event-hall-sensor {
    label = "Hall Effect Sensor";
    gpios = <0x31 0x09 0x01>;
-   1,input-type = <0x05>;
-   1,code = <0x00>;
+   linux,input-type = <0x05>;
+   linux,code = <0x00>;
    debounce-interval = <0x0f>;
-   1,can-disable;
+   linux,can-disable;
    wakeup-source;
   };
  };

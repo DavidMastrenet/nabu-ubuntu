@@ -10,11 +10,9 @@ if [[ -z "$TARGET_USER" || "$TARGET_USER" == root ]]; then
 fi
 uid="$(id -u "$TARGET_USER")"
 desktop_home="$(getent passwd "$TARGET_USER" | cut -d: -f6)"
-DEBIAN_FRONTEND=noninteractive apt-get install -y python3-gi python3-libgpiod
+DEBIAN_FRONTEND=noninteractive apt-get install -y python3-gi
 files=(
     usr/local/bin/nabu-display-state
-    usr/local/sbin/nabu-lid-switch
-    etc/systemd/system/nabu-lid-switch.service
     etc/systemd/user/nabu-display-state.service
     etc/systemd/logind.conf.d/60-nabu-lid.conf
 )
@@ -26,11 +24,14 @@ for path in "${files[@]}"; do
     fi
     install -D -m644 "$REPO/rootfs/$path" "/$path"
 done
-chmod 755 /usr/local/bin/nabu-display-state /usr/local/sbin/nabu-lid-switch
+chmod 755 /usr/local/bin/nabu-display-state
 systemctl daemon-reload
 systemctl kill -s HUP systemd-logind.service
-systemctl enable nabu-lid-switch.service
-systemctl restart nabu-lid-switch.service
+if [[ -f /etc/systemd/system/nabu-lid-switch.service ]]; then
+    systemctl disable --now nabu-lid-switch.service
+    rm -f /etc/systemd/system/nabu-lid-switch.service /usr/local/sbin/nabu-lid-switch
+    systemctl daemon-reload
+fi
 
 # Global unit files do not enable a user service for an existing account.
 install -d -o "$TARGET_USER" -g "$(id -gn "$TARGET_USER")" \

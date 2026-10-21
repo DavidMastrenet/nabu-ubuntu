@@ -1,0 +1,54 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Guard the conservative 5 V SMB5 path; leave high-voltage PD to LN8000."""
+from pathlib import Path
+import time
+
+BASE = Path('/sys/class/power_supply')
+SMB = BASE / 'pm8150b-charger'
+BAT = BASE / 'qcom-battery'
+last = None
+
+
+def number(path):
+    return int(path.read_text().strip())
+
+
+while True:
+    try:
+        if not SMB.exists():
+            time.sleep(1)
+            continue
+        usb = next(p for p in BASE.glob('tcpm-source-psy-*'))
+        online = number(usb / 'online')
+        voltage = number(usb / 'voltage_now')
+        temperature = number(BAT / 'temp')
+        battery_voltage = number(BAT / 'voltage_now')
+        health = (SMB / 'health').read_text().strip()
+        if not online:
+            reason = 'USB disconnected'
+        elif voltage > 5500000:
+            reason = 'PD voltage: SMB5 suspended, LN8000 owns charging'
+        elif not 0 < temperature < 450:
+            reason = 'battery outside 0-45 C'
+        elif battery_voltage > 4370000:
+            reason = 'battery voltage guard'
+        elif health != 'Good':
+            reason = 'charger health: ' + health
+        else:
+            reason = '5 V USB charging, input limited to 500 mA'
+        enabled = reason.startswith('5 V USB')
+        if reason != last:
+            (SMB / 'status').write_text('1\n' if enabled else '0\n')
+            print(reason, flush=True)
+            last = reason
+    except (OSError, ValueError, StopIteration) as error:
+        try:
+            (SMB / 'status').write_text('0\n')
+        except OSError:
+            pass
+        message = 'charging suspended while waiting for telemetry: ' + str(error)
+        if message != last:
+            print(message, flush=True)
+            last = message
+    time.sleep(1)

@@ -2,12 +2,12 @@
 
 [中文说明](README.zh-CN.md)
 
-Drivers, runtime files and source changes for Ubuntu 26.04 ARM64 with kernel `6.14.11-nabu-tmm`. This is a Linux-only setup for **Xiaomi Pad 5**, not Pad 5 Pro. The Ubuntu disk image is downloaded separately.
+Drivers, runtime files and source changes for Ubuntu 26.04 ARM64 with kernel `6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`. This is a Linux-only setup for **Xiaomi Pad 5**, not Pad 5 Pro. The Ubuntu disk image is downloaded separately.
 
 ## Install
 
 1. Unlock the bootloader. Install the [nabu Ubuntu 26.04 base image](https://github.com/TheMojoMan/xiaomi-nabu/releases/tag/ubuntu-26.04-v1.0.0), following the upstream installation instructions. The root partition must be named `linux`; the EFI partition must be mounted at `/boot/efi`. Keep Qualcomm firmware and the device's `persist` partition.
-2. Finish desktop setup and connect to Wi-Fi. Copy this repository to the tablet.
+2. Finish desktop setup and connect to Wi-Fi. The matching 6.17 BSP kernel must be installed at `/boot/vmlinuz-6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`. Copy this repository to the tablet.
 3. Run from the repository directory:
 
    ```sh
@@ -36,11 +36,13 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 - Speaker and microphone configuration, RTC selection and boot-success marking.
 - Fast rEFInd menu: `timeout 2`, the theme's icon set (`include themes/refind-theme-regular/theme.conf` plus an explicit Ubuntu icon) and only the `GopRotate` driver, so there is no "no icon" stall before the menu.
 - Stable Wi-Fi MAC: `ath10k` has no board address on nabu, so NetworkManager is configured with `wifi.cloned-mac-address=stable` instead of a random address per boot.
-- Type-C sink role: a oneshot service and udev rule write `sink` into `/sys/class/typec/port0/power_role`, so a charger is accepted instead of the tablet sourcing the port.
+- Type-C sink role: a daemon and udev rule keep the selected power role at `sink`.
+- Computer USB charging through PM8150B SMB5, with a 500 mA USB input limit, a 4.35 V float target and temperature/voltage guards.
+- Correct native lid and volume-up input properties in the device tree.
 
-Reboot, suspend/resume, camera switching, autofocus, display, touch, rotation, keyboard, speakers and microphone were checked on the target tablet. USB-PD charging was also checked.
+The 6.17 update was booted and checked on the target tablet. Front and rear camera capture, audio playback, sensor orientation, desktop display, touch and USB networking passed. A 180-second trace showed battery charging in all 37 samples, USB input 480–483 mA, temperature 29 C and charger health Good. PD hardware testing was skipped for this revision.
 
-The Type-C role attribute brackets its selected value: `source [sink]` means the tablet is already receiving power. The sink daemon reads that selected value and changes the role only when it is actually source. Receiving USB power alone does not establish battery charging: with the current kernel configuration, a 5 V computer USB connection still discharges the battery. USB-PD charging works; conventional 5 V charging needs PM8150B SMB5 driver and device-tree integration, which this build does not include.
+The Type-C role attribute brackets its selected value: `source [sink]` means the tablet is already receiving power. SMB5 handles ordinary 5 V USB. Above 5.5 V, the guard suspends SMB5; LN8000 enables its PD charge-pump path from 8 V upward. Driver sources and provenance are in [source/kernel/charging](source/kernel/charging/README.md).
 
 ## Brightness and magnetic cover
 
@@ -60,7 +62,7 @@ gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action n
 systemctl --user restart nabu-display-state.service
 ```
 
-On the tested boot image, the live device tree exposes `1,code` and `1,input-type` in the GPIO keys node, and the kernel rejects it with `Button without keycode`. The installed DTB files have the correct `linux,` properties. `nabu-lid-switch` reads TLMM GPIO9, with active-low polarity and 15 ms debounce, and exposes `SW_LID` through uinput. It exits without claiming the GPIO if a native lid switch is already present. `nabu-display-state` uses UPower and Mutter to control display power because the GNOME lid-action setting alone did not blank this tablet.
+The included device tree corrects `1,code` and `1,input-type` to `linux,code` and `linux,input-type`. The kernel now registers the physical GPIO9 lid switch and volume-up key directly. The previous GPIO-to-uinput lid service is no longer needed. `nabu-display-state` uses UPower and Mutter to power the panel off and on.
 
 ## Build
 
@@ -71,7 +73,7 @@ bash build.sh
 bash build-kernel.sh
 ```
 
-`build.sh` downloads the pinned Ubuntu source packages, applies the included source overlays, and installs rebuilt userspace components. `build-kernel.sh` builds the modified modules and EFI image under `.build/kernel`; it does not install them. The running kernel's `/boot/vmlinuz-6.14.11-nabu-tmm` is required.
+`build.sh` downloads the pinned Ubuntu source packages, applies the included source overlays, and installs rebuilt userspace components. `build-kernel.sh` builds the modified modules and EFI image under `.build/kernel`; it does not install them. The matching BSP image `/boot/vmlinuz-6.17.0-xiaomi-nabu-tmm-UFS-slowdown+` is required. The script prepares Linux 6.17 headers and rebuilds the overlays; it uses the installed BSP image for the EFI file.
 
 `rootfs/` contains runtime files, `boot/` the EFI image and device tree, and `source/` the modified source files and supporting libraries. Build downloads stay in `.build/`.
 
@@ -79,7 +81,7 @@ bash build-kernel.sh
 
 Keep the base image's EFI loader. To boot it again, change the Ubuntu `loader` line in `/boot/efi/EFI/BOOT/refind.conf` to its original path; the installer saves the original configuration in the backup directory above. If Ubuntu cannot boot, mount the EFI partition from a recovery environment and restore that configuration.
 
-The kernel is held at `6.14.11-nabu-tmm`. Rebuild and recheck the modules before changing kernels.
+The BSP kernel is held at `6.17.0-xiaomi-nabu-tmm-UFS-slowdown+`. Rebuild and recheck the modules before changing kernels.
 
 ## Credits
 
