@@ -40,6 +40,8 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 
 Reboot, suspend/resume, camera switching, autofocus, display, touch, rotation, keyboard, speakers and microphone were checked on the target tablet. USB-PD charging was also checked.
 
+The Type-C role attribute brackets its selected value: `source [sink]` means the tablet is already receiving power. The sink daemon reads that selected value and changes the role only when it is actually source. Receiving USB power alone does not establish battery charging: with the current kernel configuration, a 5 V computer USB connection still discharges the battery. USB-PD charging works; conventional 5 V charging needs PM8150B SMB5 driver and device-tree integration, which this build does not include.
+
 ## Brightness and magnetic cover
 
 The desktop remembers brightness in `~/.local/state/nabu-brightness.json` and restores it after login. Idle dimming and ambient brightness are disabled. Closing the magnetic cover powers off the panel; opening it powers the panel on. USB networking and SSH remain available while the cover is closed. These fixes can be installed separately without changing the kernel, boot image, or installed applications:

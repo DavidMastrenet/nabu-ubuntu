@@ -13,7 +13,11 @@ partner_dir=/sys/class/typec/port0-partner
 
 last=""
 while true; do
-    current=$(cut -d' ' -f1 "$role_file" 2>/dev/null || true)
+    # Dual-role attributes list both choices and bracket the selected role.
+    # For example, "source [sink]" already means sink, not source.
+    roles=$(cat "$role_file" 2>/dev/null || true)
+    current=$(printf '%s\n' "$roles" | sed -n 's/.*\[\([^]]*\)\].*/\1/p')
+    [ -n "$current" ] || current=$roles
     if [ -n "$current" ] && [ "$current" != "$last" ]; then
         logger -t nabu-typec-sink "role is ${current}"
         last=$current
