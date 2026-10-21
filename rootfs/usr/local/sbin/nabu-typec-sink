@@ -1,18 +1,29 @@
 #!/bin/sh
-# Put the Type-C port into the sink (charging) role.
+# Keep the Type-C port in the sink (charging) role.
 #
-# On nabu the TCPM (pm8150b typec) keeps the port in source/host role unless
-# something flips it, so a charger is never accepted. Idempotent; safe to run on
-# every Type-C change event.
-set -eu
+# The pm8150b TCPM on nabu starts the port as source and re-evaluates the role
+# whenever the partner changes, so a single one-shot write is not enough: watch
+# the state and correct it each time it drifts back to source.
+set -u
 
 role_file=/sys/class/typec/port0/power_role
+partner_dir=/sys/class/typec/port0-partner
 
 [ -w "$role_file" ] || exit 0
 
-current=$(cut -d' ' -f1 "$role_file" 2>/dev/null || true)
-[ "$current" = "sink" ] && exit 0
-
-echo sink > "$role_file" 2>/dev/null || true
-logger -t nabu-typec-sink "power_role ${current:-?} -> sink"
-exit 0
+last=""
+while true; do
+    current=$(cut -d' ' -f1 "$role_file" 2>/dev/null || true)
+    if [ -n "$current" ] && [ "$current" != "$last" ]; then
+        logger -t nabu-typec-sink "role is ${current}"
+        last=$current
+    fi
+    # Only correct the role while a partner (charger/host) is attached.
+    if [ "$current" = "source" ] && [ -d "$partner_dir" ]; then
+        if echo sink > "$role_file" 2>/dev/null; then
+            logger -t nabu-typec-sink "power_role source -> sink"
+            last=sink
+        fi
+    fi
+    sleep 2
+done
