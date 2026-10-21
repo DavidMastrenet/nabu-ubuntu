@@ -1,0 +1,20 @@
+name: Build nabu kernel 6.18
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  kernel:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y build-essential flex bison bc libssl-dev libelf-dev curl device-tree-compiler systemd-ukify
+      - name: Build full BSP and board modules
+        run: bash source/kernel/build-6.18.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nabu-kernel-6.18
+          path: .build/kernel-6.18/nabu-kernel-6.18.tar.gz
+          retention-days: 3
