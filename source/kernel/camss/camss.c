@@ -2202,26 +2202,6 @@ void camss_disable_clocks(int nclocks, struct camss_clock *clock)
  *
  * Return a pointer to sensor media entity or NULL if not found
  */
-static struct media_pad *camss_find_sensor_pad(struct media_entity *entity)
-{
-	struct media_pad *pad;
-
-	while (1) {
-		pad = &entity->pads[0];
-		if (!(pad->flags & MEDIA_PAD_FL_SINK))
-			return NULL;
-
-		pad = media_pad_remote_pad_first(pad);
-		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
-			return NULL;
-
-		entity = pad->entity;
-
-		if (entity->function == MEDIA_ENT_F_CAM_SENSOR)
-			return pad;
-	}
-}
-
 struct media_entity *camss_find_sensor(struct media_entity *entity)
 {
 	struct media_pad *pad;
@@ -2253,13 +2233,16 @@ struct media_entity *camss_find_sensor(struct media_entity *entity)
 s64 camss_get_link_freq(struct media_entity *entity, unsigned int bpp,
 			unsigned int lanes)
 {
-	struct media_pad *sensor_pad;
+	struct media_entity *sensor;
+	struct v4l2_subdev *subdev;
 
-	sensor_pad = camss_find_sensor_pad(entity);
-	if (!sensor_pad)
+	sensor = camss_find_sensor(entity);
+	if (!sensor)
 		return -ENODEV;
 
-	return v4l2_get_link_freq(sensor_pad, bpp, 2 * lanes);
+	subdev = media_entity_to_v4l2_subdev(sensor);
+
+	return v4l2_get_link_freq(subdev->ctrl_handler, bpp, 2 * lanes);
 }
 
 /*
