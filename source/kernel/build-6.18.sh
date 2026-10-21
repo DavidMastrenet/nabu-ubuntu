@@ -8,6 +8,7 @@ PHASE="${1:-all}"
 mkdir -p "$BUILD"
 cd "$BUILD"
 prepare() {
+[[ -f /usr/lib/systemd/boot/efi/linuxaa64.efi.stub ]]
 if [[ ! -f linux/Makefile ]]; then
 curl --fail --location --retry 3 "https://gitlab.postmarketos.org/api/v4/projects/soc%2Fqualcomm-sm8150%2Flinux/repository/archive.tar.gz?sha=$REV" -o source.tar.gz
 mkdir linux
@@ -54,9 +55,10 @@ cp linux/.config "package/boot/config-$KERNEL"
 cp linux/System.map "package/boot/System.map-$KERNEL"
 dtc -I dts -O dtb "$REPO/source/kernel/nabu.dts" -o "package/boot/dtb-$KERNEL"
 mkdir -p package/boot/efi/EFI/ubuntu
+printf '%s\n' 'ID=ubuntu' 'NAME="Ubuntu"' 'PRETTY_NAME="Ubuntu 26.04 LTS"' 'VERSION_ID=26.04' 'VERSION_CODENAME=resolute' > os-release-target
 ukify build --linux="package/boot/vmlinuz-$KERNEL" --devicetree="package/boot/dtb-$KERNEL" \
     --cmdline='root=PARTLABEL=linux rw fw_devlink=permissive cma=256M' \
-    --os-release=@/etc/os-release --uname="$KERNEL" \
+    --os-release=@os-release-target --uname="$KERNEL" \
     --output="package/boot/efi/EFI/ubuntu/6.18.0-nabu-smb5.efi"
 rm -f "package/lib/modules/$KERNEL/build" "package/lib/modules/$KERNEL/source"
 depmod -b "$BUILD/package" -a "$KERNEL"
